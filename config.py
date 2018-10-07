@@ -1,7 +1,9 @@
+from login import login, password
+
 system = "k4t"
 # k4q nebo k4d
-user = "S1268"
-password = "p0pcorn"
+user = login
+password = password
 headless_mode = False
 url_trx = {"k4d": "kod.mgit.cz:8021/s2ap/trx?terminal_id=XHV&sap-language=CS",
            "k4q": "kod.mgit.cz:8011/s2ap/trx?terminal_id=XHV&sap-language=CS",
