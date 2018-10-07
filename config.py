@@ -15,5 +15,4 @@ port_s = {"k4d": 32015,
           "k4t": 34015,
           }
 
-cart_id = "MT001"
 cons_type = "02"
