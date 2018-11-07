@@ -76,7 +76,7 @@ def box_creating_by_guess(driver):
                 continue
 
         except:
-            print(f"picked box {box_no}")
+            print(f"HU {box_no}")
             return box_no
 
 
@@ -139,7 +139,7 @@ def get_table_data_alt_quantity(driver):
     return alt_quantity
 
 
-def picking(driver, items, material_d):
+def picking_main(driver, items, material_d):
     enter_wmq_add(driver)
 
     deliveries_d = {}
@@ -180,7 +180,7 @@ if __name__ == '__main__':
     login(wd, user, password)
 
     items = 1
-    materials = {'1000388': {'CW': 'OVOZEL'}}
+    materials = {'1000397': {'CW': ''}}
 
     deliveries = picking(wd, items, materials)
     print(deliveries)

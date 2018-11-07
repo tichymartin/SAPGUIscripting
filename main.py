@@ -11,7 +11,7 @@ from drivers import login, get_driver, close_browser, initialization
 
 if __name__ == '__main__':
 
-    data = {"so": [5510000515,
+    data = {"so": [5510001355,
                    ], "user": user}
     ses = initialization()
     data["dlv"] = []
@@ -29,16 +29,16 @@ if __name__ == '__main__':
 
     wd = get_driver()
     login(wd, user, password)
-
+    #
     data["boxes"] = picking(wd, data["items"], data["materials"])
-
-    print(data["boxes"])
-    data["boxes_for_control"] = consolidation(wd, data["boxes"])
-    print(data["boxes_for_control"])
-
-    data["boxes_for_shipping"] = control_main(wd, ses, data["boxes_for_control"], data["dlv"])
-    print(data["boxes_for_shipping"])
-
-    shipment(wd, data["route"], data["user"], data["boxes_for_shipping"])
-    # close_browser(wd)
+    #
+    # print(data["boxes"])
+    # data["boxes_for_control"] = consolidation(wd, data["boxes"])
+    # print(data["boxes_for_control"])
+    #
+    # data["boxes_for_shipping"] = control_main(wd, ses, data["boxes_for_control"], data["dlv"])
+    # print(data["boxes_for_shipping"])
+    #
+    # shipment(wd, data["route"], data["user"], data["boxes_for_shipping"])
+    # # close_browser(wd)
     print(data)

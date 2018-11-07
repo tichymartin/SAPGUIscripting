@@ -50,8 +50,7 @@ def main_confirm_to(pallets):
 
 
 if __name__ == '__main__':
-    wd = get_driver()
-    login(wd, user, password)
-    palls = ["6595671840"]
-    open_wm_cnf(wd)
-    confirm_to(wd, palls)
+    # wd = get_driver()
+    # login(wd, user, password)
+    palls = [5065606130]
+    main_confirm_to(palls)

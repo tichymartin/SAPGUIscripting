@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from drivers import get_driver, login, close_browser
-from config import user, password, cons_type, cart_id
+from config import user, password, cons_type
 from sap_ywmqueue_control import ywmqueue_control
 from drivers import initialization
 from sap_getdata import get_items_from_hu_for_control, get_empty_hu, get_courier_positions

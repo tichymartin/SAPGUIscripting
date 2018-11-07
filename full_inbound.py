@@ -2,8 +2,8 @@ from sap_create_po import main_po
 from trx_inbound import inbound
 from trx_confirm_to_inbound import main_confirm_to
 
-bp = "5000000044"
-materials = ["1000412", ]
+bp = "5000000000"
+materials = ["1000397", ]
 
 indls = main_po(bp, materials)
 # indls = "180000188"

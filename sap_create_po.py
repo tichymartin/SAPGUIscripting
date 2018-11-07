@@ -1,5 +1,5 @@
 from drivers import initialization
-
+from sap_zmonex import tzmonex
 
 def create_po(session, bussines_partner, materials):
     session.StartTransaction(Transaction="me21n")
@@ -11,7 +11,7 @@ def create_po(session, bussines_partner, materials):
         session.FindById(
             f"wnd[0]/usr/subSUB0:SAPLMEGUI:0013/subSUB2:SAPLMEVIEWS:1100/subSUB2:SAPLMEVIEWS:1200/subSUB1:SAPLMEGUI:1211/tblSAPLMEGUITC_1211/ctxtMEPO1211-EMATN[5,{count}]").text = material
         session.FindById(
-            f"wnd[0]/usr/subSUB0:SAPLMEGUI:0013/subSUB2:SAPLMEVIEWS:1100/subSUB2:SAPLMEVIEWS:1200/subSUB1:SAPLMEGUI:1211/tblSAPLMEGUITC_1211/txtMEPO1211-MENGE[7,{count}]").text = "10"
+            f"wnd[0]/usr/subSUB0:SAPLMEGUI:0013/subSUB2:SAPLMEVIEWS:1100/subSUB2:SAPLMEVIEWS:1200/subSUB1:SAPLMEGUI:1211/tblSAPLMEGUITC_1211/txtMEPO1211-MENGE[7,{count}]").text = "100"
     session.FindById("wnd[0]").sendVKey(0)
     session.FindById("wnd[0]/tbar[0]/btn[11]").press()
     session.FindById("wnd[1]/usr/btnSPOP-VAROPTION1").press()
@@ -67,3 +67,4 @@ if __name__ == '__main__':
     # # print(data)
 
     main_po(sess, bp, materials)
+    # tzmonex(sess)

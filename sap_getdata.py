@@ -70,19 +70,34 @@ def get_courier_positions():
     return [x[0] for x in cursor.fetchall()]
 
 
+def get_dlv_for_so(sales_order):
+    cursor = hana_cursor()
+    cursor.execute(f"select VBELN from SAPECP.VBFA where VBELV='{sales_order}' ")
+    try:
+        return cursor.fetchone()[0]
+    except TypeError:
+        raise Exception(f"k zakazce {sales_order} se nepodarilo zalozit dodavku")
+
+
+def get_to_for_dlv(dlv):
+    cursor = hana_cursor()
+    cursor.execute(f"select VBELN from SAPECP.VBFA where VBTYP_N='Q' and  VBELV='{dlv}' ")
+    try:
+        to_list = [to[0].lstrip("0") for to in cursor.fetchall()]
+        to_list = set(to_list)
+        to_list = list(to_list)
+        return to_list
+    except TypeError:
+        raise Exception(f"k dodavce {dlv} se nepovedlo zalozit skladove prikazy")
+
+
+def get_tst_data():
+    cursor = hana_cursor()
+    cursor.execute(f'select POSNR, MATNR from SAPECP.VBAP where VBELN=5510001340 ')
+    return [print(_) for _ in cursor.fetchall()]
+
+
 if __name__ == '__main__':
-    dlv = "2000000243"
-    to = "261"
-    materials = ['1001618', '1001619']
-    # cursor = hana_cursor()
-    # print(get_route_hana(dlv))
-    # print(get_shipment_id_hana(100003))
-    # print(get_cart_for_shipping())
 
-    hu = [26756]
-    # print(get_items_from_hu_for_control(hu)[0][1])
-    # x = str(get_items_from_hu_for_control(hu)[0][1])
-    # print(x)
-    print(get_empty_hu())
-
-    # print(get_courier_positions())
+    dlv = 2000000845
+    print(get_to_for_dlv(dlv))

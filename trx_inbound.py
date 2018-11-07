@@ -129,8 +129,8 @@ if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
 
-    delivery = "180000274"
-    palts = inbound(wd, delivery)
+    delivery = "180000189"
+    palts = inbound(delivery)
     print(palts)
 
     # matnr = 1000357

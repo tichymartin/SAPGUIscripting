@@ -59,7 +59,7 @@ def ywmqueue(session, transport_orders, user):
     grid_to.selectedRows = f"{to_for_pick_lines[0]} - {to_for_pick_lines[-1]}"
     grid_to.pressToolbarButton("BT_ASSIGN")
 
-    print(f"transport orders {transport_orders} assigned to user {user}")
+    print(f"TO {transport_orders} assigned to {user}")
 
     return len(to_for_pick_lines), materials_d
 

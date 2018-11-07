@@ -1,4 +1,6 @@
 import win32com.client
+from datetime import datetime
+from sap_getdata import get_route_hana
 
 
 def initialization():
@@ -22,6 +24,9 @@ def verify(session=None, control=None):
 def zmonex(session, delivery):
     session.StartTransaction(Transaction="ZMONEX")
 
+    # today = datetime.now().date().strftime("%d.%m.%Y")
+
+    # session.FindById('wnd[0]/usr/txt%_P_LFDAT_%_APP_%-TEXT').text = today
     session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
     session.FindById('wnd[0]/tbar[1]/btn[7]').Press()
 
@@ -54,7 +59,9 @@ def zmonex(session, delivery):
     session.FindById("wnd[0]/tbar[1]/btn[14]").Press()
     session.FindById("wnd[1]/tbar[0]/btn[0]").Press()
 
-    print(f"dlvs {delivery} planned in ZMONEX")
+    route = get_route_hana(delivery[0])
+
+    print(f"DLV {delivery} - ROUTE {route}")
 
 
 def get_route(session, delivery):
@@ -99,11 +106,22 @@ def check_CW_matn(session, materials):
     return mat_dict
 
 
+def tzmonex(session):
+    session.StartTransaction(Transaction="ZMONEX")
+
+    today = datetime.now().date().strftime("%d.%m.%Y")
+
+    session.FindById('wnd[0]/usr/txt%_P_LFDAT_%_APP_%-TEXT').text = today
+    session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
+    session.FindById('wnd[0]/tbar[1]/btn[7]').Press()
+
+
 if __name__ == '__main__':
     sess = initialization()
     dlv = ["2000000298", ]
     to = "275"
-    zmonex(sess, dlv)
+    # zmonex(sess, dlv)
+    tzmonex(sess)
     # get_route(sess, dlv)
     # create_route_for_dlv(sess, dlv)
     # print(get_matn_from_to(sess, to))
