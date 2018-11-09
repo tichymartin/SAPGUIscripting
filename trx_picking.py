@@ -94,7 +94,6 @@ def pick_meat(driver, box_no, mtn_cw):
 
 
 def ovozel_boxes(driver, dlv_dict):
-    # dlv_dict = {'2000000312': [{50413: {'CW': 'OVOZEL', 'parallel_quantity': '4'}}]}
     boxes_list = check_ovozel_boxes(dlv_dict)
     if boxes_list:
         print(boxes_list)
@@ -139,7 +138,7 @@ def get_table_data_alt_quantity(driver):
     return alt_quantity
 
 
-def picking_main(driver, items, material_d):
+def picking(driver, items, material_d):
     enter_wmq_add(driver)
 
     deliveries_d = {}
