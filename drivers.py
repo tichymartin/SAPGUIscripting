@@ -25,6 +25,33 @@ def get_driver():
     return driver
 
 
+def get_driver_specific(wm_type):
+    opts = Options()
+    opts.headless = headless_mode
+
+    driver = webdriver.Chrome(options=opts)
+    if system == "k4d":
+        if wm_type == "03":
+            page = "kod.mgit.cz:8021/s2ap/trx?terminal_id=CHLAZ&sap-language=CS"
+        elif wm_type == "04":
+            page = "kod.mgit.cz:8021/s2ap/trx?terminal_id=MRAZ&sap-language=CS"
+        else:
+            raise Exception("WM type not defined for login")
+
+    elif system == "k4t":
+        if wm_type == "03":
+            page = "kod.mgit.cz:8041/s2ap/trx?terminal_id=CHLAZ&sap-language=CS"
+        elif wm_type == "04":
+            page = "kod.mgit.cz:8041/s2ap/trx?terminal_id=MRAZ&sap-language=CS"
+        else:
+            raise Exception("WM type not defined for login")
+    else:
+        raise Exception("Server not found")
+
+    driver.get(page)
+    return driver
+
+
 def login(driver, user, password):
     elem = driver.find_element_by_id("iUSER")
     elem.clear()

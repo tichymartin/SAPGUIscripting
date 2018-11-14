@@ -44,23 +44,13 @@ def get_su_from_hana(cursor, storage_unit):
         return data[0].lstrip("0")
 
 
-def get_items_from_hu_for_control(handling_units):
-    cursor = hana_cursor()
+def get_items_from_hu_for_control(cursor, handling_units):
     items = []
     for hu in handling_units:
         cursor.execute(f"select MATNR, LFIMG from sapecp.YECH_HU_ITEMS where ID = '{hu:0>20}'")
         data = cursor.fetchall()
         items.extend(data)
     return data
-
-
-def get_empty_hu():
-    cursor = hana_cursor()
-    cursor.execute(f"select ID from sapecp.YECH_HU where STATUS = 'P' and VBELN=''")
-    data = cursor.fetchall()
-    data_list = [hu[0].lstrip("0") for hu in data if not len(hu[0].lstrip("0")) > 5]
-
-    return data_list[0]
 
 
 def get_courier_positions():

@@ -95,12 +95,12 @@ def create_json_for_so(materials):
     data["partners"][2]["partn_numb"] = ""
     data["partners"][2]["partn_role"] = "RE"
 
-    jsdata = json.dumps(data, indent=4, ensure_ascii=False)
+    jsdata = json.dumps(data, ensure_ascii=False)
 
     # print(jsdata)
 
     with codecs.open('json.txt', 'w', encoding="UTF-8") as outfile:
-        json.dump(data, outfile, ensure_ascii=False)
+        json.dump(data, outfile, indent=4, ensure_ascii=False)
 
     return jsdata
 

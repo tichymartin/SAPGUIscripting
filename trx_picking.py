@@ -1,10 +1,11 @@
+import random
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from drivers import get_driver, login, close_browser
 from config import user, password
-import random
+from drivers import hana_cursor
 
 
 def enter_wmq_add(driver):
@@ -138,12 +139,15 @@ def get_table_data_alt_quantity(driver):
     return alt_quantity
 
 
-def picking(driver, items, material_d):
+def picking(driver, cursor, transport_orders, material_d):
     enter_wmq_add(driver)
 
     deliveries_d = {}
+    no_items_in_transport_orders = 0
+    for transport_order in transport_orders:
+        no_items_in_transport_orders += get_no_items_in_transport_orders(cursor, transport_order)
 
-    for item in range(items):
+    for item in range(no_items_in_transport_orders):
         table_data = get_table_data(driver)
         input_storage_loc(driver, table_data)
         input_quantity(driver, table_data)
@@ -174,12 +178,22 @@ def picking(driver, items, material_d):
     return deliveries_d
 
 
+def get_no_items_in_transport_orders(cursor, transport_order):
+
+    cursor.execute(f'select * from "SAPECP"."LTAP" where TANUM = {transport_order}')
+    no_items = len(cursor.fetchall())
+    return int(no_items)
+
+
 if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
+    cursor = hana_cursor()
 
-    items = 1
-    materials = {'1000397': {'CW': ''}}
+    to = ['1221', ]
+    materials = {'1002180': {'CW': ''}}
 
-    deliveries = picking(wd, items, materials)
+    deliveries = picking(wd, cursor, to, materials)
     print(deliveries)
+
+

@@ -1,1 +1,125 @@
-{"header": {"sd_doc": "", "sales_org": "1000", "plant": "1000", "purch_no_c": "test", "purch_date": "", "pymt_meth": "H", "create_date": "20180503", "create_time": "080106", "eshop_id": "eshop_id_frotest", "dlv_block": "", "support_note": "", "client_note": "", "payId": "payIDGOGOGO", "conditions": []}, "items": [{"itm_number": "10", "hg_lv_item": "", "free_item ": "X", "material": "10000", "item_categ": "", "short_text": "Doprava", "long_text": "", "target_qty": 1, "target_qu": "LE", "dlv_group": "", "req_date_from": "20181109", "req_time_from": "235900", "req_date_to": "20181109", "req_time_to": "235900", "purch_no_c": "", "conditions": []}, {"itm_number": "20", "hg_lv_item": "", "free_item ": "", "material": "1000397", "item_categ": "", "short_text": "", "long_text": "", "target_qty": 1, "target_qu": "PC", "dlv_group": "", "req_date_from": "20181109", "req_time_from": "235900", "req_date_to": "20181109", "req_time_to": "235900", "purch_no_c": "", "conditions": [{"cond_type": "PR01", "cond_value": "100", "currency": "CZK"}]}], "partners": [{"partn_numb": "1000001200", "partn_role": "AG", "name1": "Ondřeja", "name2": "Bílá", "city": "Praha", "street": "Černá", "house_number": "2", "post_code1": "170 00", "country": "CZ", "tel_number": "774927254", "mob_number": "", "email": "ondrej.bily@gmail.com", "tax_no_1": "", "tax_no_2": "", "vat_reg_no": "", "language": "cs", "latitude": "50.29659", "longitude": "14.394016"}, {"partn_numb": "", "partn_role": "WE", "name1": "Ondřeja", "name2": "Bílá", "city": "Praha", "street": "Černá", "house_number": "2", "post_code1": "170 00", "country": "CZ", "tel_number": "774927254", "mob_number": "", "email": "ondrej.bily@gmail.com", "tax_no_1": "", "tax_no_2": "", "vat_reg_no": "", "language": "cs", "latitude": "50.29659", "longitude": "14.394016", "transpzone": "TEST_2"}, {"partn_numb": "", "partn_role": "RE", "name1": "Ondřeja", "name2": "Bílá", "city": "Praha", "street": "Černá", "house_number": "2", "post_code1": "170 00", "country": "CZ", "tel_number": "774927254", "mob_number": "", "email": "ondrej.bily@gmail.com", "tax_no_1": "", "tax_no_2": "", "vat_reg_no": "", "language": "cs", "latitude": "50.29659", "longitude": "14.394016"}]}
+{
+    "header": {
+        "sd_doc": "",
+        "sales_org": "1000",
+        "plant": "1000",
+        "purch_no_c": "test",
+        "purch_date": "",
+        "pymt_meth": "H",
+        "create_date": "20180503",
+        "create_time": "080106",
+        "eshop_id": "eshop_id_frotest",
+        "dlv_block": "",
+        "support_note": "",
+        "client_note": "",
+        "payId": "payIDGOGOGO",
+        "conditions": []
+    },
+    "items": [
+        {
+            "itm_number": "10",
+            "hg_lv_item": "",
+            "free_item ": "X",
+            "material": "10000",
+            "item_categ": "",
+            "short_text": "Doprava",
+            "long_text": "",
+            "target_qty": 1,
+            "target_qu": "LE",
+            "dlv_group": "",
+            "req_date_from": "20181114",
+            "req_time_from": "235900",
+            "req_date_to": "20181114",
+            "req_time_to": "235900",
+            "purch_no_c": "",
+            "conditions": []
+        },
+        {
+            "itm_number": "20",
+            "hg_lv_item": "",
+            "free_item ": "",
+            "material": "1002180",
+            "item_categ": "",
+            "short_text": "",
+            "long_text": "",
+            "target_qty": 1,
+            "target_qu": "PC",
+            "dlv_group": "",
+            "req_date_from": "20181114",
+            "req_time_from": "235900",
+            "req_date_to": "20181114",
+            "req_time_to": "235900",
+            "purch_no_c": "",
+            "conditions": [
+                {
+                    "cond_type": "PR01",
+                    "cond_value": "100",
+                    "currency": "CZK"
+                }
+            ]
+        }
+    ],
+    "partners": [
+        {
+            "partn_numb": "1000001200",
+            "partn_role": "AG",
+            "name1": "Ondřeja",
+            "name2": "Bílá",
+            "city": "Praha",
+            "street": "Černá",
+            "house_number": "2",
+            "post_code1": "170 00",
+            "country": "CZ",
+            "tel_number": "774927254",
+            "mob_number": "",
+            "email": "ondrej.bily@gmail.com",
+            "tax_no_1": "",
+            "tax_no_2": "",
+            "vat_reg_no": "",
+            "language": "cs",
+            "latitude": "50.29659",
+            "longitude": "14.394016"
+        },
+        {
+            "partn_numb": "",
+            "partn_role": "WE",
+            "name1": "Ondřeja",
+            "name2": "Bílá",
+            "city": "Praha",
+            "street": "Černá",
+            "house_number": "2",
+            "post_code1": "170 00",
+            "country": "CZ",
+            "tel_number": "774927254",
+            "mob_number": "",
+            "email": "ondrej.bily@gmail.com",
+            "tax_no_1": "",
+            "tax_no_2": "",
+            "vat_reg_no": "",
+            "language": "cs",
+            "latitude": "50.29659",
+            "longitude": "14.394016",
+            "transpzone": "TEST_2"
+        },
+        {
+            "partn_numb": "",
+            "partn_role": "RE",
+            "name1": "Ondřeja",
+            "name2": "Bílá",
+            "city": "Praha",
+            "street": "Černá",
+            "house_number": "2",
+            "post_code1": "170 00",
+            "country": "CZ",
+            "tel_number": "774927254",
+            "mob_number": "",
+            "email": "ondrej.bily@gmail.com",
+            "tax_no_1": "",
+            "tax_no_2": "",
+            "vat_reg_no": "",
+            "language": "cs",
+            "latitude": "50.29659",
+            "longitude": "14.394016"
+        }
+    ]
+}

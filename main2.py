@@ -2,18 +2,21 @@ from sap_vl01n_ylt03 import make_dlv, make_transport_order_in_ylt03
 from sap_ywmqueue import ywmqueue
 from trx_picking import picking
 from trx_consolidation import consolidation
-from trx_control import control_main
+from trx_control import control
 from trx_shipping import shipment
 from sap_zmonex import zmonex
 from sap_getdata import get_route_hana
 from config import user, password
 from drivers import login, get_driver, close_browser, initialization
 from sap_create_so import create_json_for_so, create_so_from_sa38
+from sap_ywmqueue_control import ywmqueue_control
+from drivers import hana_cursor
 
 
 def make_session():
     session = initialization()
-    data = {"session": session}
+    cursor = hana_cursor()
+    data = {"session": session, "cursor": cursor}
     return data
 
 
@@ -33,25 +36,25 @@ def make_dlv_and_to(data):
     """
 
     data["user"] = user
-    data["dlv"] = []
+    data["deliveries"] = []
     data["to"] = []
 
     for so in data["so"]:
         dlv = make_dlv(data["session"], so)
-        data["dlv"].append(dlv)
+        data["deliveries"].append(dlv)
         data["to"].append(make_transport_order_in_ylt03(data["session"], dlv))
 
     return data
 
 
-def append_to_user(data):
-    data["items"], data["materials"] = ywmqueue(data["session"], data["to"], data["user"])
+def append_transport_orders(data):
+    data["materials"] = ywmqueue(data["session"], data["to"], data["user"])
 
     return data
 
 
 def plan_route(data):
-    data["route"] = zmonex(data["session"], data["dlv"])
+    data["route"] = zmonex(data["session"], data["deliveries"])
 
     return data
 
@@ -59,19 +62,31 @@ def plan_route(data):
 def picking_main(data):
     wd = get_driver()
     data["web_driver"] = wd
-    login(wd, user, password)
-    data["boxes"] = picking(data["web_driver"], data["items"], data["materials"])
+    login(data["web_driver"], data["user"], password)
+    data["boxes_for_consolidation"] = picking(data["web_driver"], data["cursor"], data["to"], data["materials"])
 
     return data
 
 
 def consolidation_main(data):
-    data["boxes_for_control"] = consolidation(data["web_driver"], data["boxes"])
+    data["web_driver"] = consolidation(data["web_driver"], data["cursor"], data["deliveries"])
     return data
 
-#
-# data["boxes_for_shipping"] = control_main(wd, ses, data["boxes_for_control"], data["dlv"])
-# print(data["boxes_for_shipping"])
+
+def append_control_orders(data):
+    ywmqueue_control(data["session"], data["deliveries"], data["user"])
+    return data
+
+
+def control_main(data):
+    data["boxes_for_courier"] = control(data["web_driver"], data["cursor"], data["deliveries"])
+    return data
+
+
+# def courier_main(data):
+#     data["boxes_for_shipping"] = courier(data["web_driver"], data["boxes_for_courier"])
+#     return data
+
 #
 # shipment(wd, data["route"], data["user"], data["boxes_for_shipping"])
 # # close_browser(wd)

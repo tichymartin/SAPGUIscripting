@@ -15,10 +15,10 @@ def create_so_from_sa38(session, json):
         order_line = session.FindById(f"wnd[1]/usr/lbl[9,{line_counter}]").text
         if order_line.startswith(".ECH"):
             sales_order = int(order_line.split()[2])
+            print(f"SO {sales_order}")
             break
         elif order_line.startswith("<<<< Chyba"):
-            print("ERROR - SO not created, check JSON")
-            break
+            raise Exception("ERROR - SO not created, check JSON")
         else:
             line_counter += 1
             if line_counter == 30:

@@ -28,18 +28,18 @@ def ywmqueue_control(session, deliveries, user):
     for delivery in deliveries:
 
         for line in range(grid_to.RowCount):
-            # print(grid_to.GetCellValue(line, "TANUM"))
             if grid_to.GetCellValue(line, "VBELN") == delivery:
                 dlv_for_control_lines.append(line)
 
     if len(dlv_for_control_lines) == 0:
-        print(f"delivery {deliveries} nejsou ve fronte")
+        print(f"DLV {deliveries} nejsou ve fronte")
         return
 
+    dlv_for_control_lines = dlv_for_control_lines.sort()
     grid_to.selectedRows = f"{dlv_for_control_lines[0]} - {dlv_for_control_lines[-1]}"
     grid_to.pressToolbarButton("BT_ASSIGN")
 
-    print(f"deliveries {deliveries} assigned to user {user}")
+    print(f"DLV {deliveries} assigned to {user}")
 
     return
 
@@ -52,7 +52,7 @@ def ywmqueue_control(session, deliveries, user):
 
 if __name__ == '__main__':
     sess = initialization()
-    deliveries = ['2000000274']
+    deliveries = ['2000000894', '2000000895']
     user = "S1268"
 
     ywmqueue_control(sess, deliveries, user)

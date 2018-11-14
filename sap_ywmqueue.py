@@ -61,7 +61,7 @@ def ywmqueue(session, transport_orders, user):
 
     print(f"TO {transport_orders} assigned to {user}")
 
-    return len(to_for_pick_lines), materials_d
+    return materials_d
 
     # helpful methods
     # grid.RowCount

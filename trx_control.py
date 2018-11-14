@@ -1,12 +1,30 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from drivers import get_driver, login, close_browser
 from config import user, password, cons_type
-from sap_ywmqueue_control import ywmqueue_control
 from drivers import initialization
-from sap_getdata import get_items_from_hu_for_control, get_empty_hu, get_courier_positions
+from sap_getdata import get_courier_positions
+from drivers import hana_cursor
+
+
+def get_data_for_control(cursor, deliveries):
+    cont_dict = {}
+    type_dict = {"02": 0, "03": 0, "04": 0}
+    for delivery in deliveries:
+        cursor.execute(
+            f'select EXC_BARCODE, EXC_LOADING_TYPE from "SAPECP"."/S2IM/001_EXCPOS" where vbeln=\'{delivery}\' and EXC_TYPE = \'1\'')
+        data = [pos for pos in cursor.fetchall()]
+        for type_pos in data:
+            type_dict[type_pos[1]] += 1
+        for dat in data:
+            cont_dict[dat[0]] = list()
+
+    for position in cont_dict.keys():
+        cursor.execute(
+            f'select HU_ID from "SAPECP"."/S2IM/001_EXCP_I" where EXC_SECTION=\'{position[0]}\' and EXC_POSITION = \'{position[1:]}\'')
+        [cont_dict[position].append(hu_id[0].lstrip("0")) for hu_id in cursor.fetchall()]
+
+    return cont_dict, type_dict
 
 
 def enter_control(driver):
@@ -14,46 +32,48 @@ def enter_control(driver):
     elem.click()
 
 
-def control_for_delivery(driver, boxes_dict):
-    hu_to_courier = []
-    for position in boxes_dict.keys():
-        boxes = add_box_from_cons_to_control(driver, boxes_dict[position])
-
-        items = get_items_from_hu_for_control(boxes)
-
-        control_hu = get_empty_hu()
-        confirm_insert_to_control(driver)
-        control_items(driver, items, control_hu)
-        confirm_control(driver)
-        hu_to_courier.append(control_hu)
-
-    return hu_to_courier
+def get_control_position(driver):
+    table = driver.find_element_by_id("info_string_table").text
+    return table.strip().split()[4]
 
 
-def add_box_from_cons_to_control(driver, boxes_list):
-    boxes = []
-    for box in boxes_list:
+def get_empty_hu(cursor):
+    cursor.execute(f"select ID from sapecp.YECH_HU where STATUS = 'P' and VBELN=''")
+    data = cursor.fetchall()
+    data_list = [hu[0].lstrip("0") for hu in data if not len(hu[0].lstrip("0")) > 5]
+
+    return data_list
+
+
+def add_box_from_cons_to_control(driver, box_list):
+    for box in box_list:
         hu_field = driver.find_element_by_id("p_field")
         hu_field.send_keys(box)
         hu_field.send_keys(Keys.RETURN)
-        boxes.append(box)
-        print(f"box {box} entered control station")
-
-    return boxes
 
 
 def confirm_insert_to_control(driver):
-    back_menu = driver.find_element_by_id("butmenu")
-    back_menu.click()
-
-    elem = driver.find_element(By.CSS_SELECTOR, "input[name*='take_over']")
-    elem.click()
-
-    elem = driver.find_element(By.CSS_SELECTOR, "input[name*='answer_yes']")
-    elem.click()
+    driver.find_element(By.CSS_SELECTOR, "input[name*='take_over']").click()
+    driver.find_element(By.CSS_SELECTOR, "input[name*='answer_yes']").click()
 
 
-def control_items(driver, items, empty_hu):
+def short_control(driver, empty_hu):
+    element = driver.find_element_by_id("p_field")
+    element.send_keys(empty_hu)
+    element.send_keys(Keys.RETURN)
+
+
+def get_items_from_hu_for_control(cursor, handling_units):
+    items = []
+    for hu in handling_units:
+        cursor.execute(f"select MATNR, LFIMG from sapecp.YECH_HU_ITEMS where ID = '{hu:0>20}'")
+        data = cursor.fetchall()
+        items.extend(data)
+
+    return items
+
+
+def complete_control(driver, items, empty_hu):
     for item in items:
         matnr_field = driver.find_element_by_id("p_field")
         matnr_field.send_keys(item[0])
@@ -67,64 +87,25 @@ def control_items(driver, items, empty_hu):
         hu_field.send_keys(empty_hu)
         hu_field.send_keys(Keys.RETURN)
 
-    print(f"materials repacked to hu {empty_hu}")
-
 
 def confirm_control(driver):
-    back_menu = driver.find_element_by_id("butmenu")
-    back_menu.click()
-
-    elem = driver.find_element(By.CSS_SELECTOR, "input[name*='end_full_check']")
-    elem.click()
-
-    elem = driver.find_element(By.CSS_SELECTOR, "input[name*='answer_yes']")
-    elem.click()
+    driver.find_element(By.CSS_SELECTOR, "input[name*='end_check']").click()
+    driver.find_element(By.CSS_SELECTOR, "input[name*='answer_yes']").click()
+    driver.find_element(By.CSS_SELECTOR, "input[name*='answer_yes']").click()
 
 
-def enter_courier(driver):
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
+def change_workstation(driver, type):
+    if type == "03":
+        workstation = "$ALL_CHLAZ"
+    elif type == "04":
+        workstation = "$ALL_MRAZ"
+    else:
+        workstation = "$ALL"
 
-    elem = driver.find_element(By.CSS_SELECTOR, "button[name*='EXT_CONS']")
-    elem.click()
-
-    elem = driver.find_element(By.CSS_SELECTOR, "button[name*='EXC_ADD2']")
-    elem.click()
-
-
-def courier(driver, hu_to_courier):
-    courier_loc = get_courier_positions()
-    boxes_for_shipping = {}
-    for box in hu_to_courier:
-        position = courier_loc.pop()
-        box_field = driver.find_element_by_id("p_field")
-        box_field.send_keys(box)
-        box_field.send_keys(Keys.RETURN)
-
-        field = driver.find_element_by_id("p_field")
-        field.send_keys(position[0])
-        field.send_keys(Keys.RETURN)
-
-        field = driver.find_element_by_id("p_field")
-        field.send_keys(position[1:])
-        field.send_keys(Keys.RETURN)
-
-        box_field = driver.find_element_by_id("p_field")
-        box_field.send_keys(box)
-        box_field.send_keys(Keys.RETURN)
-
-        field = driver.find_element_by_id("p_field")
-        field.send_keys(position[0])
-        field.send_keys(Keys.RETURN)
-
-        field = driver.find_element_by_id("p_field")
-        field.send_keys(position[1:])
-        field.send_keys(Keys.RETURN)
-
-        boxes_for_shipping[position] = []
-        boxes_for_shipping[position].append(box)
-
-    return boxes_for_shipping
+    beep_field = driver.find_element_by_id("lv_beep_b")
+    beep_field.send_keys(f"PLA{workstation}")
+    beep_sim = driver.find_element_by_id("beep_sim")
+    beep_sim.click()
 
 
 def exit_control(driver):
@@ -135,22 +116,48 @@ def exit_control(driver):
     back_menu.click()
 
 
-def control_main(driver, session, boxes, deliveries):
-    ywmqueue_control(session, deliveries, user)
-    enter_control(driver)
-    hu_to_courier = control_for_delivery(driver, boxes)
-    enter_courier(driver)
-    boxes = courier(driver, hu_to_courier)
-    exit_control(driver)
-    print(boxes)
-    return boxes
+def control(driver, cursor, deliveries):
+    position_and_boxes_dict, type_consolidation_dict = get_data_for_control(cursor, deliveries)
+    empty_hu_list = get_empty_hu(cursor)
+
+    if type_consolidation_dict["02"]:
+        change_workstation(driver, "02")
+        enter_control(driver)
+
+        while type_consolidation_dict["02"]:
+            type_consolidation_dict["02"] -= 1
+
+            position = get_control_position(driver)
+            add_box_from_cons_to_control(driver, position_and_boxes_dict[position])
+            confirm_insert_to_control(driver)
+            short_control(driver, empty_hu_list.pop())
+            confirm_control(driver)
+
+            if not type_consolidation_dict["02"]:
+                driver.find_element(By.CSS_SELECTOR, "input[name*='answer_no']").click()
+
+    if type_consolidation_dict["03"]:
+        change_workstation(driver, "03")
+        enter_control(driver)
+        while type_consolidation_dict["03"]:
+            type_consolidation_dict["03"] -= 1
+
+            position = get_control_position(driver)
+            add_box_from_cons_to_control(driver, position_and_boxes_dict[position])
+            confirm_insert_to_control(driver)
+            short_control(driver, empty_hu_list.pop())
+            confirm_control(driver)
+
+            if not type_consolidation_dict["03"]:
+                driver.find_element(By.CSS_SELECTOR, "input[name*='answer_no']").click()
+
+    change_workstation(driver, "02")
+    return
 
 
 if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
-    boxess = {'X6': [65070]}
-    deliveries = ["2000000280"]
-
-    sess = initialization()
-    control_main(wd, sess, boxess)
+    cursor = hana_cursor()
+    deliveris = ['2000000570', '2000000571']
+    control(wd, cursor, deliveris)
