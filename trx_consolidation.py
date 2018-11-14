@@ -6,25 +6,16 @@ from drivers import hana_cursor
 
 
 def enter_consolidation(driver):
-    elem = driver.find_element(By.CSS_SELECTOR, "button[name*='EXT_CONS']")
-    elem.click()
-
-
-def enter_cons_add(driver):
-    elem = driver.find_element(By.CSS_SELECTOR, "button[name*='EXC_ADD)']")
-    elem.click()
+    driver.find_element(By.CSS_SELECTOR, "button[name*='EXT_CONS']").click()
+    driver.find_element(By.CSS_SELECTOR, "button[name*='EXC_ADD)']").click()
 
 
 def close_consolidation(driver):
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
-
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
+    driver.find_element_by_id("butback").click()
+    driver.find_element_by_id("butback").click()
 
 
 def insert_box(driver, box, position):
-    # input boxes
     box_field = driver.find_element_by_id("p_field")
     box_field.send_keys(box)
     box_field.send_keys(Keys.RETURN)
@@ -52,52 +43,81 @@ def insert_box(driver, box, position):
     print(f"HU {box} - CONS {position}")
 
 
-def consolidation(driver, cursor, deliveries):
-    enter_consolidation(driver)
-    enter_cons_add(driver)
-    deliver_and_boxes_dict, type_consolidation_dict = get_data_for_consolidation(cursor, deliveries)
-    if type_consolidation_dict["02"]:
-        positions = get_cons_position(cursor, "02")
-        for delivery in deliver_and_boxes_dict.keys():
-            for hu_data in deliver_and_boxes_dict[delivery]:
-                if hu_data[1] == "02":
-                    insert_box(driver, hu_data[0], positions.pop())
-
-    if type_consolidation_dict["03"]:
-        close_browser(driver)
-        wd_chlaz = get_driver_specific("03")
-        login(wd_chlaz, user, password)
-        enter_consolidation(wd_chlaz)
-        enter_cons_add(wd_chlaz)
-        positions = get_cons_position(cursor, "03")
-        for delivery in deliver_and_boxes_dict.keys():
-            for hu_data in deliver_and_boxes_dict[delivery]:
-                if hu_data[1] == "03":
-                    insert_box(wd_chlaz, hu_data[0], positions.pop())
-        close_browser(wd_chlaz)
-
-    if type_consolidation_dict["04"]:
-        if not type_consolidation_dict["03"]:
-            close_browser(driver)
-        wd_mraz = get_driver_specific("04")
-        login(wd_mraz, user, password)
-        enter_consolidation(wd_mraz)
-        enter_cons_add(wd_mraz)
-        positions = get_cons_position(cursor, "04")
-        for delivery in deliver_and_boxes_dict.keys():
-            for hu_data in deliver_and_boxes_dict[delivery]:
-                if hu_data[1] == "04":
-                    insert_box(wd_mraz, hu_data[0], positions.pop())
-        close_browser(wd_mraz)
-
-    if type_consolidation_dict["03"] or type_consolidation_dict["04"]:
-        driver = get_driver()
-        login(driver, user, password)
-
+def change_workstation(driver, type):
+    if type == "03":
+        workstation = "$ALL_CHLAZ"
+    elif type == "04":
+        workstation = "$ALL_MRAZ"
     else:
-        close_consolidation(driver)
+        workstation = "$ALL"
 
-    return driver
+    beep_field = driver.find_element_by_id("lv_beep_b")
+    beep_field.send_keys(f"PLA{workstation}")
+    beep_sim = driver.find_element_by_id("beep_sim")
+    beep_sim.click()
+
+
+def consolidation(driver, cursor, deliveries):
+    deliver_and_boxes_dict, type_consolidation_dict = get_data_for_consolidation(cursor, deliveries)
+
+    storage_types = "02", "03", "04"
+    for storage_type in storage_types:
+
+        if type_consolidation_dict[storage_type]:
+            positions = get_cons_position(cursor, storage_type)
+            change_workstation(driver, storage_type)
+            enter_consolidation(driver)
+
+            for delivery in deliver_and_boxes_dict.keys():
+
+                for hu_data in deliver_and_boxes_dict[delivery]:
+                    if hu_data[1] == storage_type:
+                        insert_box(driver, hu_data[0], positions.pop())
+
+            close_consolidation(driver)
+    #
+    # if type_consolidation_dict["02"]:
+    #     positions = get_cons_position(cursor, "02")
+    #     for delivery in deliver_and_boxes_dict.keys():
+    #         for hu_data in deliver_and_boxes_dict[delivery]:
+    #             if hu_data[1] == "02":
+    #                 insert_box(driver, hu_data[0], positions.pop())
+    #
+    # if type_consolidation_dict["03"]:
+    #     close_browser(driver)
+    #     wd_chlaz = get_driver_specific("03")
+    #     login(wd_chlaz, user, password)
+    #     enter_consolidation(wd_chlaz)
+    #     enter_cons_add(wd_chlaz)
+    #     positions = get_cons_position(cursor, "03")
+    #     for delivery in deliver_and_boxes_dict.keys():
+    #         for hu_data in deliver_and_boxes_dict[delivery]:
+    #             if hu_data[1] == "03":
+    #                 insert_box(wd_chlaz, hu_data[0], positions.pop())
+    #     close_browser(wd_chlaz)
+    #
+    # if type_consolidation_dict["04"]:
+    #     if not type_consolidation_dict["03"]:
+    #         close_browser(driver)
+    #     wd_mraz = get_driver_specific("04")
+    #     login(wd_mraz, user, password)
+    #     enter_consolidation(wd_mraz)
+    #     enter_cons_add(wd_mraz)
+    #     positions = get_cons_position(cursor, "04")
+    #     for delivery in deliver_and_boxes_dict.keys():
+    #         for hu_data in deliver_and_boxes_dict[delivery]:
+    #             if hu_data[1] == "04":
+    #                 insert_box(wd_mraz, hu_data[0], positions.pop())
+    #     close_browser(wd_mraz)
+    #
+    # if type_consolidation_dict["03"] or type_consolidation_dict["04"]:
+    #     driver = get_driver()
+    #     login(driver, user, password)
+    #
+    # else:
+    #     close_consolidation(driver)
+    #
+    # return driver
 
 
 def get_data_for_consolidation(cursor, deliveries):
@@ -123,8 +143,8 @@ def get_cons_position(cursor, type_of_cons):
 if __name__ == '__main__':
     # wd = get_driver()
     # login(wd, user, password)
-    cursor = hana_cursor()
-    deliveries = ['2000000748']
+    cursora = hana_cursor()
+    deliveris = ['2000000748']
     # print(consolidation(wd, cursor, deliveries))
     # print(get_data_for_consolidation(del_dict))
-    print(get_cons_position(cursor, "02"))
+    print(get_cons_position(cursora, "02"))

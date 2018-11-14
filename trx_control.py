@@ -108,6 +108,24 @@ def change_workstation(driver, type):
     beep_sim.click()
 
 
+def control_over_type(driver, position_and_boxes_dict, type_consolidation_dict, empty_hu_list, storage_type):
+    if type_consolidation_dict[storage_type]:
+        change_workstation(driver, storage_type)
+        enter_control(driver)
+
+        while type_consolidation_dict[storage_type]:
+            type_consolidation_dict[storage_type] -= 1
+
+            position = get_control_position(driver)
+            add_box_from_cons_to_control(driver, position_and_boxes_dict[position])
+            confirm_insert_to_control(driver)
+            short_control(driver, empty_hu_list.pop())
+            confirm_control(driver)
+
+            if not type_consolidation_dict[storage_type]:
+                driver.find_element(By.CSS_SELECTOR, "input[name*='answer_no']").click()
+
+
 def exit_control(driver):
     back_menu = driver.find_element_by_id("butback")
     back_menu.click()
@@ -119,45 +137,17 @@ def exit_control(driver):
 def control(driver, cursor, deliveries):
     position_and_boxes_dict, type_consolidation_dict = get_data_for_control(cursor, deliveries)
     empty_hu_list = get_empty_hu(cursor)
-
-    if type_consolidation_dict["02"]:
-        change_workstation(driver, "02")
-        enter_control(driver)
-
-        while type_consolidation_dict["02"]:
-            type_consolidation_dict["02"] -= 1
-
-            position = get_control_position(driver)
-            add_box_from_cons_to_control(driver, position_and_boxes_dict[position])
-            confirm_insert_to_control(driver)
-            short_control(driver, empty_hu_list.pop())
-            confirm_control(driver)
-
-            if not type_consolidation_dict["02"]:
-                driver.find_element(By.CSS_SELECTOR, "input[name*='answer_no']").click()
-
-    if type_consolidation_dict["03"]:
-        change_workstation(driver, "03")
-        enter_control(driver)
-        while type_consolidation_dict["03"]:
-            type_consolidation_dict["03"] -= 1
-
-            position = get_control_position(driver)
-            add_box_from_cons_to_control(driver, position_and_boxes_dict[position])
-            confirm_insert_to_control(driver)
-            short_control(driver, empty_hu_list.pop())
-            confirm_control(driver)
-
-            if not type_consolidation_dict["03"]:
-                driver.find_element(By.CSS_SELECTOR, "input[name*='answer_no']").click()
+    storage_types = "02", "03", "04"
+    for storage_type in storage_types:
+        control_over_type(driver, position_and_boxes_dict, type_consolidation_dict, empty_hu_list, storage_type)
 
     change_workstation(driver, "02")
-    return
+
 
 
 if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
     cursor = hana_cursor()
-    deliveris = ['2000000570', '2000000571']
+    deliveris = ['2000000578', '2000000579']
     control(wd, cursor, deliveris)

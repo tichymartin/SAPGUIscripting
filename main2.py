@@ -10,6 +10,7 @@ from config import user, password
 from drivers import login, get_driver, close_browser, initialization
 from sap_create_so import create_json_for_so, create_so_from_sa38
 from sap_ywmqueue_control import ywmqueue_control
+from trx_courier import courier
 from drivers import hana_cursor
 
 
@@ -79,13 +80,13 @@ def append_control_orders(data):
 
 
 def control_main(data):
-    data["boxes_for_courier"] = control(data["web_driver"], data["cursor"], data["deliveries"])
+    control(data["web_driver"], data["cursor"], data["deliveries"])
     return data
 
 
-# def courier_main(data):
-#     data["boxes_for_shipping"] = courier(data["web_driver"], data["boxes_for_courier"])
-#     return data
+def courier_main(data):
+    courier(data["web_driver"], data["cursor"], data["deliveries"])
+    return data
 
 #
 # shipment(wd, data["route"], data["user"], data["boxes_for_shipping"])

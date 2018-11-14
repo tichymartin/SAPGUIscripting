@@ -35,7 +35,7 @@ def ywmqueue_control(session, deliveries, user):
         print(f"DLV {deliveries} nejsou ve fronte")
         return
 
-    dlv_for_control_lines = dlv_for_control_lines.sort()
+    dlv_for_control_lines = sorted(dlv_for_control_lines)
     grid_to.selectedRows = f"{dlv_for_control_lines[0]} - {dlv_for_control_lines[-1]}"
     grid_to.pressToolbarButton("BT_ASSIGN")
 
@@ -52,7 +52,7 @@ def ywmqueue_control(session, deliveries, user):
 
 if __name__ == '__main__':
     sess = initialization()
-    deliveries = ['2000000894', '2000000895']
+    deliveries = ['2000000578', '2000000579']
     user = "S1268"
 
     ywmqueue_control(sess, deliveries, user)

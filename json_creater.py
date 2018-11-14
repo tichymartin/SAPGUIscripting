@@ -72,19 +72,19 @@ def create_json_for_so(materials):
         "name1": "Ondřeja",
         "name2": "Bílá",
         "city": "Praha",
-        "street": "Černá",
-        "house_number": "2",
+        "street": "Kožená",
+        "house_number": "11",
         "post_code1": "170 00",
         "country": "CZ",
         "tel_number": "774927254",
         "mob_number": "",
-        "email": "ondrej.bily@gmail.com",
+        "email": "petrkovar@gmail.com",
         "tax_no_1": "",
         "tax_no_2": "",
         "vat_reg_no": "",
         "language": "cs",
-        "latitude": "50.29659",
-        "longitude": "14.394016"
+        "latitude": "55.29659",
+        "longitude": "22.394016"
     }
 
     data["partners"] = [copy.deepcopy(partner) for _ in range(3)]
