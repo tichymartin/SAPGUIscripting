@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from drivers import get_driver, login, close_browser
-from config import user, password, cons_type
+from config import user, password
 from drivers import hana_cursor
 
 
@@ -35,10 +35,10 @@ def get_courier_positions(cursor, type_of_cons):
     return empty_cons_positions
 
 
-def change_workstation(driver, type):
-    if type == "03":
+def change_workstation(driver, storage_type):
+    if storage_type == "03":
         workstation = "$ALL_CHLAZ"
-    elif type == "04":
+    elif storage_type == "04":
         workstation = "$ALL_MRAZ"
     else:
         workstation = "$ALL"
@@ -56,10 +56,11 @@ def courier_over_type(driver, cursor, deliveries_and_boxes_dict, type_courier_di
         enter_courier(driver)
 
         for delivery in deliveries_and_boxes_dict.keys():
+            position = positions.pop()
 
             for hu_data in deliveries_and_boxes_dict[delivery]:
                 if hu_data[1] == storage_type:
-                    insert_into_courier(driver, hu_data[0], positions.pop())
+                    insert_into_courier(driver, hu_data[0], position)
 
         exit_courier(driver)
 

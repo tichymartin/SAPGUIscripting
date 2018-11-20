@@ -30,6 +30,7 @@ def create_json_for_so(materials):
         "hg_lv_item": "",
         "free_item ": "X",
         "material": "10000",
+        "batch": "",
         "item_categ": "",
         "short_text": "Doprava",
         "long_text": "",
@@ -67,7 +68,7 @@ def create_json_for_so(materials):
             data["items"][count]["conditions"] = []
 
     partner = {
-        "partn_numb": "1000001200",
+        "partn_numb": "1000001224",
         "partn_role": "AG",
         "name1": "Ondřeja",
         "name2": "Bílá",
@@ -92,6 +93,7 @@ def create_json_for_so(materials):
     data["partners"][1]["partn_numb"] = ""
     data["partners"][1]["partn_role"] = "WE"
     data["partners"][1]["transpzone"] = "TEST_2"
+
     data["partners"][2]["partn_numb"] = ""
     data["partners"][2]["partn_role"] = "RE"
 

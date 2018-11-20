@@ -1,4 +1,5 @@
 import win32com.client
+import time
 from datetime import datetime
 from sap_getdata import get_dlv_for_so, get_to_for_dlv
 
@@ -17,7 +18,7 @@ def make_dlv(session, sales_order):
     session.FindById('wnd[0]/usr/ctxtLIKP-VSTEL').text = 1000
     session.FindById('wnd[0]/usr/ctxtLV50C-DATBI').text = today
     session.FindById('wnd[0]/usr/ctxtLV50C-VBELN').text = sales_order
-
+    time.sleep(1)
     session.FindById('wnd[0]/tbar[0]/btn[0]').Press()
     session.FindById('wnd[0]/tbar[0]/btn[11]').Press()
 
@@ -35,6 +36,7 @@ def make_transport_order_in_ylt03(session, delivery):
     session.FindById('wnd[0]/usr/ctxtP_DATUM').text = today
     session.FindById('wnd[0]/usr/ctxtS_VBELN-LOW').text = delivery
     session.findById("wnd[0]/usr/chkP_TEST").selected = False
+
     session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
 
     transport_order = get_to_for_dlv(delivery)

@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from drivers import get_driver, login, close_browser
-from config import user, password, cons_type
+from config import user, password
 from sap_getdata import get_shipment_id_hana, get_cart_for_shipping
 
 
@@ -11,7 +11,7 @@ def create_shipment(driver, route, user):
     button = driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP']")
     button.click()
 
-    button = driver.find_element(By.CSS_SELECTOR, f"button[name*='#NEW']")
+    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#NEW']")
     button.click()
 
     car_field = driver.find_element_by_id("p_field")

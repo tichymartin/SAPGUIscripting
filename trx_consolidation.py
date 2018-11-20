@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from drivers import get_driver, get_driver_specific, login, close_browser
+from drivers import get_driver, login, close_browser
 from config import user, password
 from drivers import hana_cursor
 
@@ -57,24 +57,34 @@ def change_workstation(driver, type):
     beep_sim.click()
 
 
+def courier_over_type(driver, cursor, deliver_and_boxes_dict, type_consolidation_dict, storage_type):
+    if type_consolidation_dict[storage_type]:
+        positions = get_cons_position(cursor, storage_type)
+        change_workstation(driver, storage_type)
+        enter_consolidation(driver)
+
+        for delivery in deliver_and_boxes_dict.keys():
+            position = positions.pop()
+
+            for hu_data in deliver_and_boxes_dict[delivery]:
+                if hu_data[1] == storage_type:
+                    insert_box(driver, hu_data[0], position)
+
+        close_consolidation(driver)
+
+
 def consolidation(driver, cursor, deliveries):
     deliver_and_boxes_dict, type_consolidation_dict = get_data_for_consolidation(cursor, deliveries)
 
     storage_types = "02", "03", "04"
     for storage_type in storage_types:
+        courier_over_type(driver, cursor, deliver_and_boxes_dict, type_consolidation_dict, storage_type)
 
-        if type_consolidation_dict[storage_type]:
-            positions = get_cons_position(cursor, storage_type)
-            change_workstation(driver, storage_type)
-            enter_consolidation(driver)
+    change_workstation(driver, "02")
 
-            for delivery in deliver_and_boxes_dict.keys():
 
-                for hu_data in deliver_and_boxes_dict[delivery]:
-                    if hu_data[1] == storage_type:
-                        insert_box(driver, hu_data[0], positions.pop())
 
-            close_consolidation(driver)
+
     #
     # if type_consolidation_dict["02"]:
     #     positions = get_cons_position(cursor, "02")
@@ -144,7 +154,6 @@ if __name__ == '__main__':
     # wd = get_driver()
     # login(wd, user, password)
     cursora = hana_cursor()
-    deliveris = ['2000000748']
-    # print(consolidation(wd, cursor, deliveries))
-    # print(get_data_for_consolidation(del_dict))
+    deliveris = ['2000000593', '2000000594']
+    # consolidation(wd, cursora, deliveris)
     print(get_cons_position(cursora, "02"))
