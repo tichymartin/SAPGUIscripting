@@ -28,9 +28,9 @@
             "target_qty": 1,
             "target_qu": "LE",
             "dlv_group": "",
-            "req_date_from": "20181120",
+            "req_date_from": "20181206",
             "req_time_from": "235900",
-            "req_date_to": "20181120",
+            "req_date_to": "20181206",
             "req_time_to": "235900",
             "purch_no_c": "",
             "conditions": []
@@ -39,42 +39,17 @@
             "itm_number": "20",
             "hg_lv_item": "",
             "free_item ": "",
-            "material": "1002338",
+            "material": "1000435",
             "batch": "",
             "item_categ": "",
             "short_text": "",
             "long_text": "",
-            "target_qty": 10,
+            "target_qty": 2,
             "target_qu": "PC",
             "dlv_group": "",
-            "req_date_from": "20181120",
+            "req_date_from": "20181206",
             "req_time_from": "235900",
-            "req_date_to": "20181120",
-            "req_time_to": "235900",
-            "purch_no_c": "",
-            "conditions": [
-                {
-                    "cond_type": "PR01",
-                    "cond_value": "100",
-                    "currency": "CZK"
-                }
-            ]
-        },
-        {
-            "itm_number": "30",
-            "hg_lv_item": "",
-            "free_item ": "",
-            "material": "1002338",
-            "batch": "",
-            "item_categ": "",
-            "short_text": "",
-            "long_text": "",
-            "target_qty": 10,
-            "target_qu": "PC",
-            "dlv_group": "",
-            "req_date_from": "20181120",
-            "req_time_from": "235900",
-            "req_date_to": "20181120",
+            "req_date_to": "20181206",
             "req_time_to": "235900",
             "purch_no_c": "",
             "conditions": [
@@ -88,7 +63,7 @@
     ],
     "partners": [
         {
-            "partn_numb": "1000001224",
+            "partn_numb": "1000001233",
             "partn_role": "AG",
             "name1": "Ondřeja",
             "name2": "Bílá",

@@ -68,7 +68,7 @@ def create_json_for_so(materials):
             data["items"][count]["conditions"] = []
 
     partner = {
-        "partn_numb": "1000001224",
+        "partn_numb": "1000001233",
         "partn_role": "AG",
         "name1": "Ondřeja",
         "name2": "Bílá",

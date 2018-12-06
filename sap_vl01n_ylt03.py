@@ -18,7 +18,7 @@ def make_dlv(session, sales_order):
     session.FindById('wnd[0]/usr/ctxtLIKP-VSTEL').text = 1000
     session.FindById('wnd[0]/usr/ctxtLV50C-DATBI').text = today
     session.FindById('wnd[0]/usr/ctxtLV50C-VBELN').text = sales_order
-    time.sleep(1)
+    # time.sleep(1)
     session.FindById('wnd[0]/tbar[0]/btn[0]').Press()
     session.FindById('wnd[0]/tbar[0]/btn[11]').Press()
 

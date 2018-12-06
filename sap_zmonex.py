@@ -25,8 +25,8 @@ def zmonex(session, delivery):
     session.StartTransaction(Transaction="ZMONEX")
 
     # today = datetime.now().date().strftime("%d.%m.%Y")
-
     # session.FindById('wnd[0]/usr/txt%_P_LFDAT_%_APP_%-TEXT').text = today
+
     session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
     session.FindById('wnd[0]/tbar[1]/btn[7]').Press()
 
@@ -60,6 +60,21 @@ def zmonex(session, delivery):
     session.FindById("wnd[1]/tbar[0]/btn[0]").Press()
 
     route = get_route_hana(delivery[0])
+
+    session.FindById("wnd[0]/tbar[0]/btn[3]").Press()
+    session.FindById("wnd[0]/tbar[1]/btn[8]").Press()
+
+    zmon_main_grid = session.FindById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+    main_len_row = zmon_main_grid.RowCount - 1
+    for zmon_row in range(main_len_row)[1:]:
+        if zmon_main_grid.GetCellValue(zmon_row, "ROUTE") == route:
+            # zmon_main_grid.selectedRows = zmon_row
+            zmon_main_grid.setCurrentCell(zmon_row, "ROUTE")
+            break
+
+    session.FindById("wnd[0]/tbar[1]/btn[20]").Press()
+    session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = "TEST"
+    session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
 
     print(f"DLV {delivery} - ROUTE {route}")
 
@@ -106,22 +121,43 @@ def check_CW_matn(session, materials):
     return mat_dict
 
 
-def tzmonex(session):
+def tzmonex(session, delivery):
     session.StartTransaction(Transaction="ZMONEX")
 
-    today = datetime.now().date().strftime("%d.%m.%Y")
+    # today = datetime.now().date().strftime("%d.%m.%Y")
+    # session.FindById('wnd[0]/usr/txt%_P_LFDAT_%_APP_%-TEXT').text = today
 
-    session.FindById('wnd[0]/usr/txt%_P_LFDAT_%_APP_%-TEXT').text = today
     session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
     session.FindById('wnd[0]/tbar[1]/btn[7]').Press()
+
+    route = get_route_hana(delivery[0])
+
+    session.FindById("wnd[0]/tbar[0]/btn[3]").Press()
+    session.FindById("wnd[0]/tbar[1]/btn[8]").Press()
+
+    zmon_main_grid = session.FindById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+    main_len_row = zmon_main_grid.RowCount - 1
+    for zmon_row in range(main_len_row)[1:]:
+        if zmon_main_grid.GetCellValue(zmon_row, "ROUTE") == route:
+            # zmon_main_grid.selectedRows = zmon_row
+            zmon_main_grid.setCurrentCell(zmon_row, "ROUTE")
+            break
+
+    session.FindById("wnd[0]/tbar[1]/btn[20]").Press()
+    session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = "TEST"
+    session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
+
+
+    print(f"DLV {delivery} - ROUTE {route}")
 
 
 if __name__ == '__main__':
     sess = initialization()
-    dlv = ["2000000298", ]
-    to = "275"
+    dlv = ["2000001002", ]
+    # to = "275"
     # zmonex(sess, dlv)
-    tzmonex(sess)
+    tzmonex(sess, dlv)
+
     # get_route(sess, dlv)
     # create_route_for_dlv(sess, dlv)
     # print(get_matn_from_to(sess, to))
