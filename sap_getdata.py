@@ -4,8 +4,7 @@ from drivers import hana_cursor
 from datetime import datetime
 
 
-def get_route_hana(delivery):
-    cursor = hana_cursor()
+def get_route_hana(cursor, delivery):
     cursor.execute(f"select route from sapecp.likp where vbeln={delivery}")
     return cursor.fetchone()[0]
 
@@ -60,8 +59,8 @@ def get_courier_positions():
     return [x[0] for x in cursor.fetchall()]
 
 
-def get_dlv_for_so(sales_order):
-    cursor = hana_cursor()
+def get_dlv_for_so(cursor, sales_order):
+
     cursor.execute(f"select VBELN from SAPECP.VBFA where VBELV='{sales_order}' ")
     try:
         return cursor.fetchone()[0]
@@ -69,13 +68,16 @@ def get_dlv_for_so(sales_order):
         raise Exception(f"k zakazce {sales_order} se nepodarilo zalozit dodavku")
 
 
-def get_to_for_dlv(dlv):
-    cursor = hana_cursor()
+def get_to_for_dlv(dlv, cursor):
+
     cursor.execute(f"select VBELN from SAPECP.VBFA where VBTYP_N='Q' and  VBELV='{dlv}' ")
     try:
         to_list = [to[0].lstrip("0") for to in cursor.fetchall()]
         to_list = set(to_list)
         to_list = list(to_list)
+
+        assert len(to_list) > 0, f"K dodavce {dlv} se nepovedlo zalozit skladove prikazy"
+
         return to_list
     except TypeError:
         raise Exception(f"k dodavce {dlv} se nepovedlo zalozit skladove prikazy")
@@ -87,7 +89,18 @@ def get_tst_data():
     return [print(_) for _ in cursor.fetchall()]
 
 
-if __name__ == '__main__':
+def get_to_from_dlv(dlv):
+    cursor = hana_cursor()
+    cursor.execute(f"select VBELN from SAPECP.VBFA where VBELV='{dlv}' ")
+    return cursor.fetchone()[0].lstrip("0")
 
-    dlv = 2000000845
-    print(get_to_for_dlv(dlv))
+
+
+if __name__ == '__main__':
+    dlv = 2000001051
+    so = 5510001568
+    # print(get_tst_data())
+    cursor = hana_cursor()
+    # print(get_to_from_dlv(dlv))
+    # print(get_to_for_dlv(dlv, cursor))
+    print(get_dlv_for_so(cursor, so))

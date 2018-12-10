@@ -11,7 +11,7 @@ def initialization():
     return session
 
 
-def make_dlv(session, sales_order):
+def make_dlv(session, cursor, sales_order):
     # make dlv from SO
     session.StartTransaction(Transaction="VL01N")
     today = datetime.now().date().strftime("%d.%m.%Y")
@@ -22,14 +22,13 @@ def make_dlv(session, sales_order):
     session.FindById('wnd[0]/tbar[0]/btn[0]').Press()
     session.FindById('wnd[0]/tbar[0]/btn[11]').Press()
 
-    dlv = get_dlv_for_so(sales_order)
+    dlv = get_dlv_for_so(cursor, sales_order)
     print(f"SO {sales_order} - DLV {dlv}")
 
     return dlv
 
 
-def make_transport_order_in_ylt03(session, delivery):
-    # make transport order from delivery
+def make_transport_order_in_ylt03(session, cursor, delivery):
     session.StartTransaction(Transaction="YLT03")
 
     today = datetime.now().date().strftime("%d.%m.%Y")
@@ -39,12 +38,7 @@ def make_transport_order_in_ylt03(session, delivery):
 
     session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
 
-    transport_order = get_to_for_dlv(delivery)
-
-    # for line_no in range(2, 10):
-    #     if session.FindById(f'wnd[0]/usr/lbl[0,{line_no}]').text.startswith("Vytvořen"):
-    #         transport_order = session.FindById(f'wnd[0]/usr/lbl[0,{line_no}]').text.split()[3].lstrip("0")
-    #         break
+    transport_order = get_to_for_dlv(delivery, cursor)
 
     print(f"DLV {delivery} - TO", end=" ")
     for to in transport_order:

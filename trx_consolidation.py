@@ -151,9 +151,9 @@ def get_cons_position(cursor, type_of_cons):
 
 
 if __name__ == '__main__':
-    # wd = get_driver()
-    # login(wd, user, password)
+    wd = get_driver()
+    login(wd, user, password)
     cursora = hana_cursor()
-    deliveris = ['2000000593', '2000000594']
-    # consolidation(wd, cursora, deliveris)
-    print(get_cons_position(cursora, "02"))
+    deliveris = ['2000000638', ]
+    consolidation(wd, cursora, deliveris)
+    # print(get_cons_position(cursora, "02"))

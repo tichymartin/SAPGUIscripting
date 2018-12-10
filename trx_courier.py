@@ -105,5 +105,5 @@ if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
     cursora = hana_cursor()
-    deliveris = ['2000000578', '2000000579']
+    deliveris = ['2000000638', ]
     print(courier(wd, cursora, deliveris))

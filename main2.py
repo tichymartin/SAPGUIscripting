@@ -17,7 +17,7 @@ from drivers import hana_cursor
 def make_session():
     session = initialization()
     cursor = hana_cursor()
-    data = {"session": session, "cursor": cursor}
+    data = {"session": session, "cursor": cursor, "user": user}
     return data
 
 
@@ -30,20 +30,24 @@ def make_so(data, data_for_sales_order):
     return data
 
 
-def make_dlv_and_to(data):
+def make_deliveries(data):
     """
     :param data: session for sap gui controller, sales_order
     :return data: dictionary of data from process
     """
 
-    data["user"] = user
     data["deliveries"] = []
-    data["to"] = []
 
     for so in data["so"]:
-        dlv = make_dlv(data["session"], so)
-        data["deliveries"].append(dlv)
-        data["to"].append(make_transport_order_in_ylt03(data["session"], dlv))
+        data["deliveries"].append(make_dlv(data["session"], data["cursor"], so))
+
+    return data
+
+
+def make_transport_orders(data):
+    data["to"] = []
+    for dlv in data["deliveries"]:
+        data["to"].append(make_transport_order_in_ylt03(data["session"], data["cursor"], dlv))
 
     return data
 
@@ -55,7 +59,7 @@ def append_transport_orders(data):
 
 
 def plan_route(data):
-    data["route"] = zmonex(data["session"], data["deliveries"])
+    data["route"] = zmonex(data["session"], data["cursor"], data["deliveries"])
 
     return data
 

@@ -21,7 +21,7 @@ def verify(session=None, control=None):
             return
 
 
-def zmonex(session, delivery):
+def zmonex(session, cursor, delivery):
     session.StartTransaction(Transaction="ZMONEX")
 
     # today = datetime.now().date().strftime("%d.%m.%Y")
@@ -59,7 +59,7 @@ def zmonex(session, delivery):
     session.FindById("wnd[0]/tbar[1]/btn[14]").Press()
     session.FindById("wnd[1]/tbar[0]/btn[0]").Press()
 
-    route = get_route_hana(delivery[0])
+    route = get_route_hana(cursor, delivery[0])
 
     session.FindById("wnd[0]/tbar[0]/btn[3]").Press()
     session.FindById("wnd[0]/tbar[1]/btn[8]").Press()
