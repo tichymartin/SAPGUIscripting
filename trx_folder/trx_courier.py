@@ -1,8 +1,8 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from drivers import get_driver, login, close_browser
+from other_folder.drivers import get_driver, login
 from config import user, password
-from drivers import hana_cursor
+from other_folder.drivers import hana_cursor
 
 
 def enter_courier(driver):
@@ -51,18 +51,47 @@ def change_workstation(driver, storage_type):
 
 def courier_over_type(driver, cursor, deliveries_and_boxes_dict, type_courier_dict, storage_type):
     if type_courier_dict[storage_type]:
-        positions = get_courier_positions(cursor, storage_type)
+        # positions = get_courier_positions(cursor, storage_type)
         change_workstation(driver, storage_type)
         enter_courier(driver)
 
         for delivery in deliveries_and_boxes_dict.keys():
-            position = positions.pop()
+            # position = positions.pop()
 
             for hu_data in deliveries_and_boxes_dict[delivery]:
                 if hu_data[1] == storage_type:
-                    insert_into_courier(driver, hu_data[0], position)
+
+                    enter_box(driver, hu_data[0])
+                    position = get_position_from_table(driver)
+                    enter_position(driver, position)
+                    enter_box(driver, hu_data[0])
+                    enter_position(driver, position)
+
+                    # insert_into_courier(driver, hu_data[0], position)
 
         exit_courier(driver)
+
+
+def get_position_from_table(driver):
+    table = driver.find_element_by_id("success").text
+    position = table.split()[0].strip(",")
+    return position
+
+
+def enter_box(driver, box):
+    box_field = driver.find_element_by_id("p_field")
+    box_field.send_keys(box)
+    box_field.send_keys(Keys.RETURN)
+
+
+def enter_position(driver, position):
+    field = driver.find_element_by_id("p_field")
+    field.send_keys(position[0:3])
+    field.send_keys(Keys.RETURN)
+
+    field = driver.find_element_by_id("p_field")
+    field.send_keys(position[4:])
+    field.send_keys(Keys.RETURN)
 
 
 def insert_into_courier(driver, box, position):

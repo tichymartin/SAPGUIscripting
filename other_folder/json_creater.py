@@ -1,10 +1,10 @@
 import json
 import codecs
 import copy
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
-def create_json_for_so(materials):
+def create_json_for_so(materials, customer=None):
 
     header = {
         "sd_doc": "",
@@ -38,9 +38,9 @@ def create_json_for_so(materials):
         "target_qu": "LE",
         "dlv_group": "",
         "req_date_from": "20181003",
-        "req_time_from": "235900",
+        "req_time_from": "232200",
         "req_date_to": "20181003",
-        "req_time_to": "235900",
+        "req_time_to": "232300",
         "purch_no_c": "",
         "conditions": [
             {
@@ -51,6 +51,10 @@ def create_json_for_so(materials):
         ]
     }
     today = datetime.now().date().strftime("%Y%m%d")
+    # today = datetime.now().date()
+    # tomorrow = today + timedelta(days=1)
+    # tomorrow = tomorrow.strftime("%Y%m%d")
+
     item["req_date_from"] = today
     item["req_date_to"] = today
 
@@ -67,19 +71,23 @@ def create_json_for_so(materials):
         else:
             data["items"][count]["conditions"] = []
 
+    if not customer:
+        customer = "1000001288"
+
     partner = {
-        "partn_numb": "1000001233",
+
+        "partn_numb": customer,
         "partn_role": "AG",
-        "name1": "Ondřeja",
-        "name2": "Bílá",
+        "name1": "Karel",
+        "name2": "Černý",
         "city": "Praha",
-        "street": "Kožená",
-        "house_number": "11",
+        "street": "Písková",
+        "house_number": "12",
         "post_code1": "170 00",
         "country": "CZ",
         "tel_number": "774927254",
         "mob_number": "",
-        "email": "petrkovar@gmail.com",
+        "email": "karelcerny@gmail.com",
         "tax_no_1": "",
         "tax_no_2": "",
         "vat_reg_no": "",
@@ -108,5 +116,5 @@ def create_json_for_so(materials):
 
 
 if __name__ == '__main__':
-    materials = [(1000357, 5, "PC"), ]
+    materials = [(1000439, 3, "PC"), ]
     create_json_for_so(materials)

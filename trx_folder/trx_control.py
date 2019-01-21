@@ -1,8 +1,8 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from drivers import get_driver, login, close_browser
-from config import user, password
-from drivers import hana_cursor
+from other_folder.drivers import get_driver, login
+from config import user, password, system
+from other_folder.drivers import hana_cursor
 
 
 def get_data_for_control(cursor, deliveries):
@@ -19,8 +19,12 @@ def get_data_for_control(cursor, deliveries):
 
     for position in cont_dict.keys():
         cursor.execute(
-            f'select HU_ID from "SAPECP"."/S2IM/001_EXCP_I" where EXC_SECTION=\'{position[0]}\' and EXC_POSITION = \'{position[1:]}\'')
+            f'select HU_ID from "SAPECP"."/S2IM/001_EXCP_I" where EXC_SECTION=\'{position[0:3]}\' and EXC_POSITION = \'{position[4:]}\'')
+        # else:
+        #     cursor.execute(
+        #         f'select HU_ID from "SAPECP"."/S2IM/001_EXCP_I" where EXC_SECTION=\'{position[0]}\' and EXC_POSITION = \'{position[1:]}\'')
         [cont_dict[position].append(hu_id[0].lstrip("0")) for hu_id in cursor.fetchall()]
+
 
     return cont_dict, type_dict
 
@@ -32,7 +36,10 @@ def enter_control(driver):
 
 def get_control_position(driver):
     table = driver.find_element_by_id("info_string_table").text
-    return table.strip().split()[4]
+    position = table.strip().split()[4]
+    # pos_like_barcode = f"{position[0]}.{position[1]}{position[2]}.{position[3]}"
+
+    return position
 
 
 def get_empty_hu(cursor):
@@ -56,9 +63,10 @@ def confirm_insert_to_control(driver):
 
 
 def short_control(driver, empty_hu):
-    element = driver.find_element_by_id("p_field")
-    element.send_keys(empty_hu)
-    element.send_keys(Keys.RETURN)
+    for hu in empty_hu:
+        element = driver.find_element_by_id("p_field")
+        element.send_keys(hu)
+        element.send_keys(Keys.RETURN)
 
 
 def get_items_from_hu_for_control(cursor, handling_units):
@@ -93,10 +101,12 @@ def confirm_control(driver):
 
 
 def change_workstation(driver, storage_type):
-    if storage_type == "03":
-        workstation = "$ALL_CHLAZ"
+    if storage_type == "02":
+        workstation = "$MTSUCH"
+    elif storage_type == "03":
+        workstation = "$MTCHLAZ"
     elif storage_type == "04":
-        workstation = "$ALL_MRAZ"
+        workstation = "$MTMRAZ"
     else:
         workstation = "$ALL"
 
@@ -116,8 +126,12 @@ def control_over_type(driver, position_and_boxes_dict, type_consolidation_dict, 
 
             position = get_control_position(driver)
             add_box_from_cons_to_control(driver, position_and_boxes_dict[position])
-            confirm_insert_to_control(driver)
-            short_control(driver, empty_hu_list.pop())
+
+            # # pro naplneni jedne prazdne HU
+            # short_control(driver, empty_hu_list.pop())
+
+            # pro naplneni vsech HU jez vstupuji do kontroly
+            short_control(driver, position_and_boxes_dict[position])
             confirm_control(driver)
 
             if not type_consolidation_dict[storage_type]:
@@ -139,12 +153,15 @@ def control(driver, cursor, deliveries):
     for storage_type in storage_types:
         control_over_type(driver, position_and_boxes_dict, type_consolidation_dict, empty_hu_list, storage_type)
 
-    change_workstation(driver, "02")
+    change_workstation(driver, "all")
+
+    return driver
 
 
 if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
     cursora = hana_cursor()
-    deliveris = ['2000000638']
+    deliveris = ['2000000063', ]
     control(wd, cursora, deliveris)
+    # print(get_data_for_control(cursora, deliveris))

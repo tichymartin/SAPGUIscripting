@@ -1,5 +1,4 @@
-from drivers import initialization
-from sap_zmonex import tzmonex
+from other_folder.drivers import initialization
 
 
 def create_po(session, bussines_partner, materials):

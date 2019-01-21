@@ -1,10 +1,8 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from drivers import get_driver, login, hana_cursor
+from other_folder.drivers import get_driver, login, hana_cursor
 from config import user, password
-from sap_getdata import get_indls_data_from_lips, get_su_from_hana
+from sap_folder.sap_getdata import get_indls_data_from_lips, get_su_from_hana
 import random
 from datetime import datetime, timedelta
 

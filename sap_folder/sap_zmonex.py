@@ -1,6 +1,6 @@
 import win32com.client
-from datetime import datetime
-from sap_getdata import get_route_hana
+from sap_folder.sap_getdata import get_route_hana
+from other_folder.drivers import hana_cursor
 
 
 def initialization():
@@ -10,18 +10,26 @@ def initialization():
     return session
 
 
+def verify_button_and_press(session=None, control=None):
+    try:
+        session.FindById(control)
+        session.FindById(control).Press()
+
+    except:
+        # Do something else here if needed
+        pass
+
+
 def verify(session=None, control=None):
-    while True:
-        try:
-            session.FindById(control)
-            return session.FindById(control)
+    try:
+        return session.FindById(control)
 
-        except:
-            # Do something else here if needed
-            return
+    except:
+        # Do something else here if needed
+        return
 
 
-def zmonex(session, cursor, delivery):
+def zmonex(session, cursor, delivery, terminal):
     session.StartTransaction(Transaction="ZMONEX")
 
     # today = datetime.now().date().strftime("%d.%m.%Y")
@@ -54,7 +62,8 @@ def zmonex(session, cursor, delivery):
 
     grid_dlv.selectedRows = f"{list(range(grid_dlv.RowCount - 1))}"
     session.FindById("wnd[0]/tbar[1]/btn[13]").Press()
-    verify(session, "wnd[1]/usr/btnBUTTON_1").Press()
+    verify_button_and_press(session, "wnd[1]/usr/btnBUTTON_1")
+    # or verify and if not None, than press
     session.FindById("wnd[1]/tbar[0]/btn[0]").Press()
     session.FindById("wnd[0]/tbar[1]/btn[14]").Press()
     session.FindById("wnd[1]/tbar[0]/btn[0]").Press()
@@ -73,7 +82,7 @@ def zmonex(session, cursor, delivery):
             break
 
     session.FindById("wnd[0]/tbar[1]/btn[20]").Press()
-    session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = "TEST"
+    session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = terminal
     session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
 
     print(f"DLV {delivery} - ROUTE {route}")
@@ -147,18 +156,12 @@ def tzmonex(session, delivery):
     session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = "TEST"
     session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
 
-
     print(f"DLV {delivery} - ROUTE {route}")
 
 
 if __name__ == '__main__':
     sess = initialization()
-    dlv = ["2000001002", ]
-    # to = "275"
-    # zmonex(sess, dlv)
-    tzmonex(sess, dlv)
+    cursor = hana_cursor("k4t")
+    dlv = ['2000000090', ]
 
-    # get_route(sess, dlv)
-    # create_route_for_dlv(sess, dlv)
-    # print(get_matn_from_to(sess, to))
-    # print(check_CW_matn(sess, materias))
+    zmonex(sess, cursor, dlv, terminal="TEST")

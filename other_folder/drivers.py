@@ -6,7 +6,7 @@ from config import headless_mode, system, url_trx, port_s
 import pyhdb
 
 
-def get_driver():
+def get_driver(system=system):
     opts = Options()
     opts.headless = headless_mode
 
@@ -17,6 +17,8 @@ def get_driver():
         page = url_trx["k4q"]
     elif system == "k4t":
         page = url_trx["k4t"]
+    elif system == "k4l":
+        page = url_trx["k4l"]
     else:
         print("unknown system")
         page = None
@@ -54,10 +56,10 @@ def initialization():
     return session
 
 
-def hana_cursor():
+def hana_cursor(syss=system):
     connection = pyhdb.connect(
         host="10.200.81.10",
-        port=port_s[system],
+        port=port_s[syss],
         user="TEST_RESULT",
         password="Results85!",
     )

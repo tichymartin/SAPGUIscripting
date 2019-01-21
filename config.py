@@ -1,6 +1,6 @@
-from login import login, password
+from other_folder.login import login, password
 
-system = "k4d"
+system = "k4t"
 # k4q nebo k4d
 user = login
 password = password

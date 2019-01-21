@@ -1,5 +1,5 @@
-from drivers import initialization
-from json_creater import create_json_for_so
+from other_folder.drivers import initialization
+from other_folder.json_creater import create_json_for_so
 
 
 def create_so_from_sa38(session, json):

@@ -1,10 +1,8 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from drivers import get_driver, login, close_browser
+from other_folder.drivers import get_driver, login
 from config import user, password
-from sap_getdata import get_shipment_id_hana, get_cart_for_shipping
+from sap_folder.sap_getdata import get_shipment_id_hana, get_cart_for_shipping
 
 
 def create_shipment(driver, route, user):

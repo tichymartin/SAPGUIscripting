@@ -1,5 +1,4 @@
-from drivers import initialization
-from drivers import hana_cursor
+from other_folder.drivers import hana_cursor
 
 
 def get_table(session):
