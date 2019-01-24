@@ -36,10 +36,12 @@ def get_courier_positions(cursor, type_of_cons):
 
 
 def change_workstation(driver, storage_type):
-    if storage_type == "03":
-        workstation = "$ALL_CHLAZ"
+    if storage_type == "02":
+        workstation = "$MTSUCH"
+    elif storage_type == "03":
+        workstation = "$MTCHLAZ"
     elif storage_type == "04":
-        workstation = "$ALL_MRAZ"
+        workstation = "$MTMRAZ"
     else:
         workstation = "$ALL"
 
@@ -47,29 +49,6 @@ def change_workstation(driver, storage_type):
     beep_field.send_keys(f"PLA{workstation}")
     beep_sim = driver.find_element_by_id("beep_sim")
     beep_sim.click()
-
-
-def courier_over_type(driver, cursor, deliveries_and_boxes_dict, type_courier_dict, storage_type):
-    if type_courier_dict[storage_type]:
-        # positions = get_courier_positions(cursor, storage_type)
-        change_workstation(driver, storage_type)
-        enter_courier(driver)
-
-        for delivery in deliveries_and_boxes_dict.keys():
-            # position = positions.pop()
-
-            for hu_data in deliveries_and_boxes_dict[delivery]:
-                if hu_data[1] == storage_type:
-
-                    enter_box(driver, hu_data[0])
-                    position = get_position_from_table(driver)
-                    enter_position(driver, position)
-                    enter_box(driver, hu_data[0])
-                    enter_position(driver, position)
-
-                    # insert_into_courier(driver, hu_data[0], position)
-
-        exit_courier(driver)
 
 
 def get_position_from_table(driver):
@@ -94,45 +73,38 @@ def enter_position(driver, position):
     field.send_keys(Keys.RETURN)
 
 
-def insert_into_courier(driver, box, position):
-    box_field = driver.find_element_by_id("p_field")
-    box_field.send_keys(box)
-    box_field.send_keys(Keys.RETURN)
-
-    field = driver.find_element_by_id("p_field")
-    field.send_keys(position[0])
-    field.send_keys(Keys.RETURN)
-
-    field = driver.find_element_by_id("p_field")
-    field.send_keys(position[1:])
-    field.send_keys(Keys.RETURN)
-
-    box_field = driver.find_element_by_id("p_field")
-    box_field.send_keys(box)
-    box_field.send_keys(Keys.RETURN)
-
-    field = driver.find_element_by_id("p_field")
-    field.send_keys(position[0])
-    field.send_keys(Keys.RETURN)
-
-    field = driver.find_element_by_id("p_field")
-    field.send_keys(position[1:])
-    field.send_keys(Keys.RETURN)
-    print(f"COUR {position} - HU {box}")
-
-
 def courier(driver, cursor, deliveries):
     deliveries_and_boxes_dict, type_courier_dict = get_data_for_courier(cursor, deliveries)
     storage_types = "02", "03", "04"
     for storage_type in storage_types:
-        courier_over_type(driver, cursor, deliveries_and_boxes_dict, type_courier_dict, storage_type)
+        courier_over_type(driver, deliveries_and_boxes_dict, type_courier_dict, storage_type)
 
-    change_workstation(driver, "02")
+    change_workstation(driver, "all")
+
+    return driver
+
+
+def courier_over_type(driver, deliveries_and_boxes_dict, type_courier_dict, storage_type):
+    if type_courier_dict[storage_type]:
+        change_workstation(driver, storage_type)
+        enter_courier(driver)
+
+        for delivery in deliveries_and_boxes_dict.keys():
+
+            for hu_data in deliveries_and_boxes_dict[delivery]:
+                if hu_data[1] == storage_type:
+                    enter_box(driver, hu_data[0])
+                    position = get_position_from_table(driver)
+                    enter_position(driver, position)
+                    enter_box(driver, hu_data[0])
+                    enter_position(driver, position)
+
+        exit_courier(driver)
 
 
 if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
     cursora = hana_cursor()
-    deliveris = ['2000000638', ]
+    deliveris = ['2000000127', ]
     print(courier(wd, cursora, deliveris))

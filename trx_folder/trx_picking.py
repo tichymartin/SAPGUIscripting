@@ -28,7 +28,9 @@ def get_table_data(driver):
                   "ean": table_text[1].split()[1],
                   "dlv": table_text[3].split()[1],
                   }
-
+    if len(table_data["location"]) > 10:
+        table_data["location"] = table_data["location"].split(".")
+        table_data["location"] = f'{table_data["location"][0]}{table_data["location"][1]}{table_data["location"][2]}{table_data["location"][3]}{table_data["location"][4]}'
     return table_data
 
 
@@ -41,7 +43,7 @@ def input_storage_loc(driver, table_data):
 
 def input_quantity(driver, amount):
     quantity_field = driver.find_element_by_id("p_field")
-    quantity_field.send_keys(amount)
+    quantity_field.send_keys(str(amount))
     quantity_field.send_keys(Keys.RETURN)
 
 
@@ -146,7 +148,7 @@ def picking(driver, cursor, user):
 
         if material_type == "MASO":
 
-            partial_amount = table_data["alt_amount"] / table_data["amount"]
+            partial_amount = str(round(table_data["alt_amount"] / int(table_data["amount"]), 3))
             input_quantity(driver, partial_amount)
             if int(table_data["amount"]) > 1:
                 for _ in range(int(table_data["amount"]) - 1):
@@ -167,9 +169,9 @@ def picking(driver, cursor, user):
 
 
 if __name__ == '__main__':
-    wd = get_driver()
+    wd = get_driver("k4d")
     login(wd, user, password)
-    cursor = hana_cursor()
-    picking(wd, cursor, "S1268")
-    # enter_wmq_add(wd)
-    # print(get_table_data_alt_quantity(wd, "MASO"))
+    # cursor = hana_cursor()
+    # picking(wd, cursor, "S1268")
+    enter_wmq_add(wd)
+    print(get_table_data(wd))

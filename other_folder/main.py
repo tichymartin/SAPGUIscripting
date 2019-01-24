@@ -3,11 +3,13 @@ from sap_folder.sap_ywmqueue import ywmqueue
 from trx_folder.trx_picking import picking
 from trx_folder.trx_consolidation import consolidation
 from trx_folder.trx_control import control
+from trx_folder.trx_shipment_preparation import shipment_unsorted
 from sap_folder.sap_zmonex import zmonex
 from config import user, password
 from other_folder.drivers import login, get_driver, initialization
 from sap_folder.sap_create_so import create_json_for_so, create_so_from_sa38
 from sap_folder.sap_ywmqueue_control import ywmqueue_control
+from sap_folder.sap_ywmqueue_shipping import ywmqueue_shiping
 from trx_folder.trx_courier import courier
 from other_folder.drivers import hana_cursor
 
@@ -86,7 +88,12 @@ def courier_main(data):
 
     return data
 
-#
-# shipment(wd, data["route"], data["user"], data["boxes_for_shipping"])
-# # close_browser(wd)
-# print(data)
+
+def append_shipment_orders(data):
+    ywmqueue_shiping(data["session"], data["deliveries"], data["user"])
+
+
+def unsorted_shipment(data):
+    data["web_driver"] = shipment_unsorted(data["web_driver"], data["cursor"], data["deliveries"])
+
+    return data

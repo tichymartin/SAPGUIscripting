@@ -28,9 +28,9 @@
             "target_qty": 1,
             "target_qu": "LE",
             "dlv_group": "",
-            "req_date_from": "20190121",
+            "req_date_from": "20190124",
             "req_time_from": "232200",
-            "req_date_to": "20190121",
+            "req_date_to": "20190124",
             "req_time_to": "232300",
             "purch_no_c": "",
             "conditions": []
@@ -39,92 +39,17 @@
             "itm_number": "20",
             "hg_lv_item": "",
             "free_item ": "",
-            "material": "1002351",
+            "material": "1000439",
             "batch": "",
             "item_categ": "",
             "short_text": "",
             "long_text": "",
-            "target_qty": 1,
+            "target_qty": 5,
             "target_qu": "PC",
             "dlv_group": "",
-            "req_date_from": "20190121",
+            "req_date_from": "20190124",
             "req_time_from": "232200",
-            "req_date_to": "20190121",
-            "req_time_to": "232300",
-            "purch_no_c": "",
-            "conditions": [
-                {
-                    "cond_type": "PR01",
-                    "cond_value": "100",
-                    "currency": "CZK"
-                }
-            ]
-        },
-        {
-            "itm_number": "30",
-            "hg_lv_item": "",
-            "free_item ": "",
-            "material": "1002351",
-            "batch": "",
-            "item_categ": "",
-            "short_text": "",
-            "long_text": "",
-            "target_qty": 1,
-            "target_qu": "PC",
-            "dlv_group": "",
-            "req_date_from": "20190121",
-            "req_time_from": "232200",
-            "req_date_to": "20190121",
-            "req_time_to": "232300",
-            "purch_no_c": "",
-            "conditions": [
-                {
-                    "cond_type": "PR01",
-                    "cond_value": "100",
-                    "currency": "CZK"
-                }
-            ]
-        },
-        {
-            "itm_number": "40",
-            "hg_lv_item": "",
-            "free_item ": "",
-            "material": "1002351",
-            "batch": "",
-            "item_categ": "",
-            "short_text": "",
-            "long_text": "",
-            "target_qty": 1,
-            "target_qu": "PC",
-            "dlv_group": "",
-            "req_date_from": "20190121",
-            "req_time_from": "232200",
-            "req_date_to": "20190121",
-            "req_time_to": "232300",
-            "purch_no_c": "",
-            "conditions": [
-                {
-                    "cond_type": "PR01",
-                    "cond_value": "100",
-                    "currency": "CZK"
-                }
-            ]
-        },
-        {
-            "itm_number": "50",
-            "hg_lv_item": "",
-            "free_item ": "",
-            "material": "1002351",
-            "batch": "",
-            "item_categ": "",
-            "short_text": "",
-            "long_text": "",
-            "target_qty": 1,
-            "target_qu": "PC",
-            "dlv_group": "",
-            "req_date_from": "20190121",
-            "req_time_from": "232200",
-            "req_date_to": "20190121",
+            "req_date_to": "20190124",
             "req_time_to": "232300",
             "purch_no_c": "",
             "conditions": [

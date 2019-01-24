@@ -109,5 +109,5 @@ if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
     cursora = hana_cursor()
-    deliveris = ['2000000062', ]
+    deliveris = ['2000000099', ]
     consolidation(wd, cursora, deliveris)
