@@ -51,7 +51,7 @@ def add_box_to_preparation_cart(driver, box_list, cart):
         cart_field.send_keys(cart)
         cart_field.send_keys(Keys.RETURN)
         position_field = driver.find_element_by_id("p_field")
-        position_field.send_keys(box)
+        position_field.send_keys(f"pos_{box}")
         position_field.send_keys(Keys.RETURN)
         hu_field = driver.find_element_by_id("p_field")
         hu_field.send_keys(box)

@@ -1,16 +1,19 @@
+from sap_folder.sap_create_so import create_json_for_so, create_so_from_sa38
 from sap_folder.sap_vl01n_ylt03 import make_dlv, make_transport_order_in_ylt03
 from sap_folder.sap_ywmqueue import ywmqueue
+from sap_folder.sap_ywmqueue_control import ywmqueue_control
+from sap_folder.sap_ywmqueue_shipping import ywmqueue_shiping
+
 from trx_folder.trx_picking import picking
 from trx_folder.trx_consolidation import consolidation
 from trx_folder.trx_control import control
+from trx_folder.trx_courier import courier
 from trx_folder.trx_shipment_preparation import shipment_unsorted
+from trx_folder.trx_shipment_sorting import shipment_sorting
 from sap_folder.sap_zmonex import zmonex
 from config import user, password
 from other_folder.drivers import login, get_driver, initialization
-from sap_folder.sap_create_so import create_json_for_so, create_so_from_sa38
-from sap_folder.sap_ywmqueue_control import ywmqueue_control
-from sap_folder.sap_ywmqueue_shipping import ywmqueue_shiping
-from trx_folder.trx_courier import courier
+
 from other_folder.drivers import hana_cursor
 
 
@@ -95,5 +98,11 @@ def append_shipment_orders(data):
 
 def unsorted_shipment(data):
     data["web_driver"] = shipment_unsorted(data["web_driver"], data["cursor"], data["deliveries"])
+
+    return data
+
+
+def sorted_shipment(data):
+    data["web_driver"] = shipment_sorting(data["web_driver"], data["cursor"], data["route"])
 
     return data

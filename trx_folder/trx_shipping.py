@@ -1,16 +1,17 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import user, password
-from sap_folder.sap_getdata import get_shipment_id_hana, get_cart_for_shipping
+from config import user, password, system
+from other_folder.drivers import hana_cursor
+from datetime import datetime
+
+
+def enter_ship(driver):
+    driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP']").click()
 
 
 def create_shipment(driver, route, user):
-    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP']")
-    button.click()
-
-    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#NEW']")
-    button.click()
+    driver.find_element(By.CSS_SELECTOR, "button[name*='#NEW']").click()
 
     car_field = driver.find_element_by_id("p_field")
     car_field.send_keys(user)
@@ -20,111 +21,87 @@ def create_shipment(driver, route, user):
     route_field.send_keys(route)
     route_field.send_keys(Keys.RETURN)
 
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
 
-    return get_shipment_id_hana(route)
-
-
-def cart_from_cons(driver, route, boxes, cart_list):
-    cart = cart_list.pop()
-    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#CART_ADD']")
-    button.click()
-
-    field = driver.find_element_by_id("p_field")
-    field.send_keys(cons_type)
-    field.send_keys(Keys.RETURN)
-
-    route_field = driver.find_element_by_id("p_field")
-    route_field.send_keys(route)
-    route_field.send_keys(Keys.RETURN)
-
-    cart_field = driver.find_element_by_id("p_field")
-    cart_field.send_keys(cart)
-    cart_field.send_keys(Keys.RETURN)
-
-    for delivery in boxes:
-
-        table = driver.find_element_by_id("info_string_table").text
-        table_text = table.split("oknu")[1].split("a")[0].split(" ")
-        position = table_text[1] + table_text[2]
-
-        cons_position_field = driver.find_element_by_id("p_field")
-        cons_position_field.send_keys(position[0])
-        cons_position_field.send_keys(Keys.RETURN)
-
-        cons_position_field = driver.find_element_by_id("p_field")
-        cons_position_field.send_keys(position[1])
-        cons_position_field.send_keys(Keys.RETURN)
-
-        for box in boxes[position]:
-            box_field = driver.find_element_by_id("p_field")
-            box_field.send_keys(box)
-            box_field.send_keys(Keys.RETURN)
-
-    # BACK
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
-
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
-
-    return cart
+def enter_shipment(driver, shipment_id):
+    driver.find_element(By.CSS_SELECTOR, f"button[name*='{shipment_id})']").click()
+    driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP_ADD']").click()
 
 
-def shipment_add_and_close(driver, boxes, user, route, shipment_id):
-    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP']")
-    button.click()
+def close_shipment(driver, user):
+    driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP_CLOSE']").click()
 
-    button = driver.find_element(By.CSS_SELECTOR, f"button[name*='{shipment_id})']")
-    button.click()
-
-    # button = driver.find_element_by_xpath(f"//*[contains(text(), '{user} - {route}')]")
-    # button.click()
-
-    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP_ADD']")
-    button.click()
-
-    for delivery in boxes:
-        for box in boxes[delivery]:
-            cart_field = driver.find_element_by_id("p_field")
-            cart_field.send_keys(box)
-            cart_field.send_keys(Keys.RETURN)
-
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
-
-    button = driver.find_element(By.CSS_SELECTOR, "button[name*='#SHIP_CLOSE']")
-    button.click()
-
-    # todo na q se neuzavre... neni tam ridic...
     cons_position_field = driver.find_element_by_id("p_field")
     cons_position_field.send_keys(user)
     cons_position_field.send_keys(Keys.RETURN)
 
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
 
-    back_menu = driver.find_element_by_id("butback")
-    back_menu.click()
+def add_boxes_to_shipment(driver, dvl_and_boxes_dict):
+    for delivery in dvl_and_boxes_dict:
+        for box in dvl_and_boxes_dict[delivery]:
+            cart_field = driver.find_element_by_id("p_field")
+            cart_field.send_keys(box)
+            cart_field.send_keys(Keys.RETURN)
+
+    driver.find_element_by_id("butback").click()
+
+    #
+    # button =
+    # button.click()
+    #
+    # # todo na q se neuzavre... neni tam ridic...
+
+    #
+    # back_menu = driver.find_element_by_id("butback")
+    # back_menu.click()
+    #
+    # back_menu = driver.find_element_by_id("butback")
+    # back_menu.click()
 
 
-def shipment(driver, route, user, boxes):
-    shipment_id = create_shipment(driver, route, user)
-    print(f"shipment {shipment_id} created for {user} and route {route}")
-    cart = cart_from_cons(driver, route, boxes, get_cart_for_shipping())
-    print(f"cart {cart} filled for {route}")
-    shipment_add_and_close(driver, boxes, user, route, shipment_id)
-    print(f"shipment '{user} - {route}' closed")
+def get_data_for_shipment(cursor, route):
+    today = datetime.now().date().strftime('%Y%m%d')
+    # cursor.execute(f"select VBELN from SAPECP.YECH_ROUTES_DLVS where ROUTE='{route}' and DATUM='{today}'")
+    # deliveries = [dlv[0] for dlv in cursor.fetchall()]
+    #
+    # dvl_and_boxes_dict = {}
+    # for delivery in deliveries:
+    #     cursor.execute(f"select ID, LOADING_TYPE from SAPECP.YECH_HU where vbeln='{delivery}' and STATUS = 'T'")
+    #     dvl_and_boxes_dict[delivery] = [hu_info[0].lstrip("0") for hu_info in cursor.fetchall()]
+
+    cursor.execute(f"select ID from SAPECP.YECH_SHIP_CART where ROUTE='{route}' and LFDAT='{today}'")
+    carts = [cart[0] for cart in cursor.fetchall()]
+    carts_and_boxes_dict = {}
+
+
+    today = datetime.now().date().strftime("%Y%m%d")
+    cursor.execute(f"select shipment_id from sapecp.YECH_SHIP where ROUTE={route} and DATUM ='{today}'")
+    shipment_id = cursor.fetchone()[0]
+
+    return shipment_id, carts
+
+
+def shipping(driver, cursor, route, user):
+    enter_ship(driver)
+    # create_shipment(driver, route, user)
+
+    shipment_id, dvl_and_boxes_dict = get_data_for_shipment(cursor, route)
+    print(f"shipment {shipment_id} opened for route {route}")
+
+    enter_shipment(driver, shipment_id)
+
+    cart_and_boxes_dict = get_data_for_cart()
+    add_boxes_to_shipment(driver, dvl_and_boxes_dict)
+    close_shipment(driver, user)
 
 
 if __name__ == '__main__':
     wd = get_driver()
     login(wd, user, password)
+    cursora = hana_cursor("k4t")
 
-    rout = 100005
-    boxes = {'X6': [19175], 'X4': [40555]}
-    # shipment(wd, rout, user, boxes)
+    route = "100004"
+    print(get_data_for_shipment(cursora, route))
+    # shipping(wd, cursora, route, user)
     # create_shipment(wd, rout, user)
     # cart_from_cons(wd, rout, boxes)
     # shipment_add_and_close(wd, boxes, user, rout)

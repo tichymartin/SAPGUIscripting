@@ -27,12 +27,12 @@ def get_data_for_courier(cursor, deliveries):
     return cons_dict, type_dict
 
 
-def get_courier_positions(cursor, type_of_cons):
-    cursor.execute(
-        f'select EXC_BARCODE from "SAPECP"."/S2IM/001_EXCPOS" where EXC_TYPE = \'2\' and EXC_LOADING_TYPE = \'{type_of_cons}\' and VBELN = \'\'')
-    empty_cons_positions = [position[0] for position in cursor.fetchall() if not position[0].endswith("9999")]
-
-    return empty_cons_positions
+# def get_courier_positions(cursor, type_of_cons):
+#     cursor.execute(
+#         f'select EXC_BARCODE from "SAPECP"."/S2IM/001_EXCPOS" where EXC_TYPE = \'2\' and EXC_LOADING_TYPE = \'{type_of_cons}\' and VBELN = \'\'')
+#     empty_cons_positions = [position[0] for position in cursor.fetchall() if not position[0].endswith("9999")]
+#
+#     return empty_cons_positions
 
 
 def change_workstation(driver, storage_type):

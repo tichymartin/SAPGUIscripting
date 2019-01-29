@@ -7,13 +7,6 @@ def get_route_hana(cursor, delivery):
     return cursor.fetchone()[0]
 
 
-def get_shipment_id_hana(route):
-    today = datetime.now().date().strftime("%Y%m%d")
-    cursor = hana_cursor()
-    cursor.execute(f"select shipment_id from sapecp.YECH_SHIP where ROUTE={route} and DATUM ='{today}'")
-    return cursor.fetchone()[0]
-
-
 def get_cart_for_shipping():
     cursor = hana_cursor()
     cursor.execute(f"select ID from sapecp.YECH_SHIP_CART where STATUS='' and ROUTE='' and SHIPMENT_ID= '' ")

@@ -169,9 +169,9 @@ def picking(driver, cursor, user):
 
 
 if __name__ == '__main__':
-    wd = get_driver("k4d")
+    wd = get_driver("k4t")
     login(wd, user, password)
-    # cursor = hana_cursor()
-    # picking(wd, cursor, "S1268")
-    enter_wmq_add(wd)
-    print(get_table_data(wd))
+    cursor = hana_cursor()
+    picking(wd, cursor, "S1268")
+    # enter_wmq_add(wd)
+    # print(get_table_data(wd))
