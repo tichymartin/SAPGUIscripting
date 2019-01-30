@@ -1,6 +1,6 @@
 from other_folder.main import make_session, make_so, make_deliveries, make_transport_orders, append_transport_orders, \
     plan_route, picking_main, consolidation_main, append_control_orders, control_main, courier_main, \
-    append_shipment_orders, unsorted_shipment
+    append_shipment_orders, unsorted_shipment, sorted_shipment, finalized_shipment
 from time import sleep
 
 if __name__ == '__main__':
@@ -32,6 +32,8 @@ if __name__ == '__main__':
     # append_control_orders(data)
     # data = control_main(data)
     # data = courier_main(data)
-    # data = plan_route(data, terminal="TEST")
-    # append_shipment_orders(data)
-    # data = unsorted_shipment(data)
+    data = plan_route(data, terminal="TEST")
+    append_shipment_orders(data)
+    data = unsorted_shipment(data)
+    data = sorted_shipment(data)
+    data = finalized_shipment(data)
