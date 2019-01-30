@@ -64,9 +64,14 @@ def plan_route(data, terminal):
     return data
 
 
-def picking_main(data):
+def web_driver_and_login(data):
     data["web_driver"] = get_driver(data["system"])
     login(data["web_driver"], data["user"], password)
+
+    return data
+
+
+def picking_main(data):
     picking(data["web_driver"], data["cursor"], data["user"])
 
     return data
