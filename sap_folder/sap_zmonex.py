@@ -87,6 +87,8 @@ def zmonex(session, cursor, delivery, terminal):
 
     print(f"DLV {delivery} - ROUTE {route}")
 
+    return route
+
 
 def get_route(session, delivery):
     session.StartTransaction(Transaction="se16n")

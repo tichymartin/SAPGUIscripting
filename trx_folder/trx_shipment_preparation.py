@@ -95,8 +95,6 @@ def shipment_unsorted(driver, cursor, deliveries):
     for storage_type in storage_types:
         shipment_over_type(driver, position_and_boxes_dict, type_consolidation_dict, storage_type, empty_carts.pop())
 
-    # print(position_and_boxes_dict)
-    # print(type_consolidation_dict)
     change_workstation(driver, "all")
 
     return driver

@@ -95,7 +95,7 @@ def shipment_over_type(driver, route, type_hu_dict, storage_type, empty_cart):
         exit_cart_add2(driver)
 
 
-def shipment_sorting(driver, cursor, route):
+def shipment_sorted(driver, cursor, route):
     dlv_and_boxes_dict, type_hu_dict, empty_carts = get_data_for_route(cursor, route)
     storage_types = "02", "03", "04"
     for storage_type in storage_types:
@@ -110,6 +110,7 @@ if __name__ == '__main__':
     wd = get_driver("k4t")
     login(wd, user, password)
     cursora = hana_cursor("k4t")
-    route = "100004"
-    shipment_sorting(wd, cursora, route)
+    route = 100002
+    shipment_sorted(wd, cursora, route)
+    # print(get_data_for_route(cursora, route))
 
