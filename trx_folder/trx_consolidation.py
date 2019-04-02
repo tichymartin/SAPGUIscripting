@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import user, password, system
+from config import system
 from other_folder.drivers import hana_cursor
 
 
@@ -107,7 +107,7 @@ def get_position_from_table(driver):
 
 if __name__ == '__main__':
     wd = get_driver()
-    login(wd, user, password)
+    login(wd)
     cursora = hana_cursor()
-    deliveris = ['2000000099', ]
+    deliveris = ['2000000327', '2000000328', ]
     consolidation(wd, cursora, deliveris)

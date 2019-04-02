@@ -1,9 +1,10 @@
+import os
+import pyhdb
+import win32com.client
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-import win32com.client
 from config import headless_mode, system, url_trx, port_s
-import pyhdb
 
 
 def get_driver(system=system):
@@ -27,12 +28,12 @@ def get_driver(system=system):
     return driver
 
 
-def login(driver, user, password):
+def login(driver):
     elem = driver.find_element_by_id("iUSER")
     elem.clear()
-    elem.send_keys(user)
+    elem.send_keys(os.environ.get("SAP_USER"))
     elem = driver.find_element_by_id("iPASSWORD")
-    elem.send_keys(password)
+    elem.send_keys(os.environ.get("SAP_PASS"))
     elem.send_keys(Keys.RETURN)
     if "Přihlášení - kontrola instance" in driver.title:
         cont_button = driver.find_element_by_class_name("button_big")
@@ -61,7 +62,7 @@ def hana_cursor(syss=system):
         host="10.200.81.10",
         port=port_s[syss],
         user="TEST_RESULT",
-        password="Results85!",
+        password="Results86!",
     )
 
     # cursor = connection.cursor()

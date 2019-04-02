@@ -78,10 +78,10 @@ def get_to_for_dlv(cursor, dlv):
 
 
 if __name__ == '__main__':
-    dlv = 2000001120
+    dlv = 2000000328
     so = 5510000972
     sess = initialization()
     cursor = hana_cursor()
     # dlv = make_dlv(sess, so)
-    print(get_dlv_for_so(cursor, so))
-    # tos = make_transport_order_in_ylt03(sess, cursor, dlv)
+    # print(get_dlv_for_so(cursor, so))
+    tos = make_transport_order_in_ylt03(sess, cursor, dlv)

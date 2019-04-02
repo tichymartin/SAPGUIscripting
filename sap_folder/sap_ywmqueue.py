@@ -50,7 +50,7 @@ def ywmqueue(session, transport_orders, user):
 
 if __name__ == '__main__':
     sess = initialization()
-    to = ["2057", ]
+    to = ["58611", "58612", ]
     ywmqueue(sess, to, user="S1268")
     # print(x)
     # print(y)

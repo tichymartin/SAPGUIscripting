@@ -13,7 +13,7 @@ def create_so_from_sa38(session, json):
     while True:
 
         order_line = session.FindById(f"wnd[1]/usr/lbl[9,{line_counter}]").text
-        if order_line.startswith(".ECH"):
+        if order_line.startswith("Termín. zakázka"):
             sales_order = int(order_line.split()[2])
             print(f"SO {sales_order}")
             break

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import user, password, system
+from config import system
 from other_folder.drivers import hana_cursor
 
 
@@ -36,7 +36,7 @@ def enter_control(driver):
 
 def get_control_position(driver):
     table = driver.find_element_by_id("info_string_table").text
-    position = table.strip().split()[4]
+    position = table.strip().split()[4].rstrip(",")
     # pos_like_barcode = f"{position[0]}.{position[1]}{position[2]}.{position[3]}"
 
     return position
@@ -120,7 +120,7 @@ def control_over_type(driver, position_and_boxes_dict, type_consolidation_dict, 
     if type_consolidation_dict[storage_type]:
         change_workstation(driver, storage_type)
         enter_control(driver)
-
+        # TODO dodelat nacitani z vice POZIC do KONTROLY v rámci zony
         while type_consolidation_dict[storage_type]:
             type_consolidation_dict[storage_type] -= 1
 
@@ -160,8 +160,8 @@ def control(driver, cursor, deliveries):
 
 if __name__ == '__main__':
     wd = get_driver()
-    login(wd, user, password)
+    login(wd)
     cursora = hana_cursor()
-    deliveris = ['2000000063', ]
+    deliveris = ['2000000327', '2000000328', ]
     control(wd, cursora, deliveris)
     # print(get_data_for_control(cursora, deliveris))

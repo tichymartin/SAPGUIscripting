@@ -163,7 +163,7 @@ def tzmonex(session, delivery):
 
 if __name__ == '__main__':
     sess = initialization()
-    cursor = hana_cursor("k4d")
-    dlv = ['2000001408', ]
+    cursor = hana_cursor("k4t")
+    dlv = ['2000000321', ]
 
     zmonex(sess, cursor, dlv, terminal="TEST")

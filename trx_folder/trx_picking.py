@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from other_folder.drivers import get_driver, login
-from config import user, password, system
+from config import system
 from other_folder.drivers import hana_cursor
 from sap_folder.sap_getdata import get_len_to_for_user, get_material_type_for_picking
 
@@ -170,7 +170,7 @@ def picking(driver, cursor, user):
 
 if __name__ == '__main__':
     wd = get_driver("k4t")
-    login(wd, user, password)
+    login(wd)
     cursor = hana_cursor()
     picking(wd, cursor, "S1268")
     # enter_wmq_add(wd)

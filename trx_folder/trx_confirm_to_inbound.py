@@ -41,7 +41,7 @@ def confirm_to(driver, pallets):
 
 def main_confirm_to(pallets):
     driver = get_driver()
-    login(driver, user, password)
+    login(driver)
     open_wm_cnf(driver)
     confirm_to(driver, pallets)
     close_browser(driver)

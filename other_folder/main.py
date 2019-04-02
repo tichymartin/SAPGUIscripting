@@ -1,3 +1,4 @@
+import os
 from sap_folder.sap_create_so import create_json_for_so, create_so_from_sa38
 from sap_folder.sap_vl01n_ylt03 import make_dlv, make_transport_order_in_ylt03
 from sap_folder.sap_zmonex import zmonex
@@ -13,8 +14,6 @@ from trx_folder.trx_shipment_preparation import shipment_unsorted
 from trx_folder.trx_shipment_sorting import shipment_sorted
 from trx_folder.trx_shipping import shipping
 
-from config import user, password
-
 from other_folder.drivers import login, get_driver, initialization
 from other_folder.drivers import hana_cursor
 
@@ -22,7 +21,7 @@ from other_folder.drivers import hana_cursor
 def make_session(system):
     session = initialization()
     cursor = hana_cursor(system)
-    data = {"session": session, "cursor": cursor, "user": user, "system": system}
+    data = {"session": session, "cursor": cursor, "user": os.environ.get("SAP_USER"), "system": system}
     return data
 
 
@@ -66,7 +65,7 @@ def plan_route(data, terminal):
 
 def web_driver_and_login(data):
     data["web_driver"] = get_driver(data["system"])
-    login(data["web_driver"], data["user"], password)
+    login(data["web_driver"])
 
     return data
 

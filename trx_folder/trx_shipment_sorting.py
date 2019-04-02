@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import user, password, system
+from config import system
 from other_folder.drivers import hana_cursor
 from datetime import datetime
 
@@ -108,9 +108,9 @@ def shipment_sorted(driver, cursor, route):
 
 if __name__ == '__main__':
     wd = get_driver("k4t")
-    login(wd, user, password)
+    login(wd)
     cursora = hana_cursor("k4t")
-    route = 100002
+    route = 100003
     shipment_sorted(wd, cursora, route)
     # print(get_data_for_route(cursora, route))
 

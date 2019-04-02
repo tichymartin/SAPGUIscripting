@@ -48,7 +48,7 @@ def ywmqueue_control(session, deliveries, user):
 
 if __name__ == '__main__':
     sess = initialization()
-    deliveries = ['2000001360', ]
+    deliveries = ['2000000327', '2000000328', ]
     user = "S1268"
 
     ywmqueue_control(sess, deliveries, user)
