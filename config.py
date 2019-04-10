@@ -1,4 +1,3 @@
-
 system = "k4t"
 # k4q nebo k4d
 headless_mode = False
@@ -12,5 +11,7 @@ port_s = {"k4d": 32015,
           "k4t": 34015,
           }
 
-
-
+pass_s = {"k4d": "Results86!",
+          "k4q": "Results85!",
+          "k4t": "Results85!",
+          }

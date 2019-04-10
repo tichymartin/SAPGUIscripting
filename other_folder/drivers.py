@@ -4,7 +4,7 @@ import win32com.client
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from config import headless_mode, system, url_trx, port_s
+from config import headless_mode, system, url_trx, port_s, pass_s
 
 
 def get_driver(system=system):
@@ -57,13 +57,12 @@ def initialization():
     return session
 
 
-def hana_cursor(syss=system):
+def hana_cursor(sys=system):
     connection = pyhdb.connect(
         host="10.200.81.10",
-        port=port_s[syss],
+        port=port_s[sys],
         user="TEST_RESULT",
-        password="Results86!",
+        password=pass_s[sys],
     )
 
-    # cursor = connection.cursor()
     return connection.cursor()

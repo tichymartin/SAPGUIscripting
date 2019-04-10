@@ -12,6 +12,7 @@ if __name__ == '__main__':
     ovozel - 1000399 
     normal_new - 1000536
     mrazeny - 1000437 
+    bezobalu - 1000547 
     """
     data = make_so(data,
                    [
@@ -27,15 +28,15 @@ if __name__ == '__main__':
     data = make_deliveries(data)
     data = make_transport_orders(data)
     append_transport_orders(data)
-    #
-    sleep(3)
+    # #
+    # sleep(3)
+    data = plan_route(data, terminal="TEST")
     data = web_driver_and_login(data)
     data = picking_main(data)
 
-    data = consolidation_main(data)
-    append_control_orders(data)
-    data = control_main(data)
-    data = plan_route(data, terminal="TEST")
+    # data = consolidation_main(data)
+    # append_control_orders(data)
+    # data = control_main(data)
     # data = courier_main(data)
     # append_shipment_orders(data)
     # data = unsorted_shipment(data)
