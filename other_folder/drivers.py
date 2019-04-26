@@ -4,22 +4,23 @@ import win32com.client
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from config import headless_mode, system, url_trx, port_s, pass_s
+from config import url_trx, port_s, pass_s
 
 
-def get_driver(system=system):
+def get_driver(system):
     opts = Options()
-    opts.headless = headless_mode
+    opts.headless = False
 
     driver = webdriver.Chrome(options=opts)
-    if system == "k4d":
-        page = url_trx["k4d"]
-    elif system == "k4q":
-        page = url_trx["k4q"]
-    elif system == "k4t":
-        page = url_trx["k4t"]
-    elif system == "k4l":
-        page = url_trx["k4l"]
+    # driver = webdriver.Ie(options=opts)
+    if system == "K4D":
+        page = url_trx["K4D"]
+    elif system == "K4Q":
+        page = url_trx["K4Q"]
+    elif system == "K4T":
+        page = url_trx["K4T"]
+    elif system == "K4L":
+        page = url_trx["K4L"]
     else:
         print("unknown system")
         page = None
@@ -48,21 +49,60 @@ def close_browser(driver):
     driver.close()
 
 
+# def initialization():
+#     sap_gui = win32com.client.GetObject("SAPGUI").GetScriptingEngine
+#     session = sap_gui.FindById("ses[0]")
+#
+#     # Run transaction RZ11. Specify the parameter name sapgui/user_scripting
+#
+#     return session
+
+
 def initialization():
-    sap_gui = win32com.client.GetObject("SAPGUI").GetScriptingEngine
-    session = sap_gui.FindById("ses[0]")
+    sap_gui_auto = win32com.client.GetObject("SAPGUI")
+    if not type(sap_gui_auto) == win32com.client.CDispatch:
+        return
 
-    # Run transaction RZ11. Specify the parameter name sapgui/user_scripting
+    application = sap_gui_auto.GetScriptingEngine
+    if not type(application) == win32com.client.CDispatch:
+        sap_gui_auto = None
+        return
 
-    return session
+    connection = application.Children(0)
+    if not type(connection) == win32com.client.CDispatch:
+        application = None
+        sap_gui_auto = None
+        return
+
+    session = connection.Children(0)
+    if not type(session) == win32com.client.CDispatch:
+        connection = None
+        application = None
+        sap_gui_auto = None
+        return
+
+    return session, connection, application, sap_gui_auto
 
 
-def hana_cursor(sys=system):
+def cls_session(session, connection, application, sap_gui_auto):
+    session = None
+    connection = None
+    application = None
+    SapGuiAuto = None
+
+
+def create_hana_connection(system):
     connection = pyhdb.connect(
         host="10.200.81.10",
-        port=port_s[sys],
+        port=port_s[system],
         user="TEST_RESULT",
-        password=pass_s[sys],
+        password=pass_s[system],
     )
 
-    return connection.cursor()
+    return connection
+
+
+def close_hana_connection(cursor, connection):
+    cursor.close()
+    connection.close()
+

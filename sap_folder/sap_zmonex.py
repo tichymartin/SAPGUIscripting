@@ -1,6 +1,6 @@
 import win32com.client
 from sap_folder.sap_getdata import get_route_hana
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def initialization():
@@ -73,17 +73,18 @@ def zmonex(session, cursor, delivery, terminal):
     session.FindById("wnd[0]/tbar[0]/btn[3]").Press()
     session.FindById("wnd[0]/tbar[1]/btn[8]").Press()
 
-    zmon_main_grid = session.FindById("wnd[0]/usr/cntlGRID1/shellcont/shell")
-    main_len_row = zmon_main_grid.RowCount - 1
-    for zmon_row in range(main_len_row)[1:]:
-        if zmon_main_grid.GetCellValue(zmon_row, "ROUTE") == route:
-            # zmon_main_grid.selectedRows = zmon_row
-            zmon_main_grid.setCurrentCell(zmon_row, "ROUTE")
-            break
-
-    session.FindById("wnd[0]/tbar[1]/btn[20]").Press()
-    session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = terminal
-    session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
+    # TODO Zmenit terminal pres vybaveni
+    # zmon_main_grid = session.FindById("wnd[0]/usr/cntlGRID1/shellcont/shell")
+    # main_len_row = zmon_main_grid.RowCount - 1
+    # for zmon_row in range(main_len_row)[1:]:
+    #     if zmon_main_grid.GetCellValue(zmon_row, "ROUTE") == route:
+    #         # zmon_main_grid.selectedRows = zmon_row
+    #         zmon_main_grid.setCurrentCell(zmon_row, "ROUTE")
+    #         break
+    #
+    # session.FindById("wnd[0]/tbar[1]/btn[20]").Press()
+    # session.FindById("wnd[1]/usr/ctxtYECH_POS_TERM-TERM_ID").text = terminal
+    # session.FindById("wnd[1]/tbar[0]/btn[8]").Press()
 
     print(f"DLV {delivery} - ROUTE {route}")
 
@@ -163,7 +164,7 @@ def tzmonex(session, delivery):
 
 if __name__ == '__main__':
     sess = initialization()
-    cursor = hana_cursor("k4t")
-    dlv = ['2000000321', ]
+    cursor = create_hana_connection("k4d")
+    dlv = ['2000003236', ]
 
     zmonex(sess, cursor, dlv, terminal="TEST")

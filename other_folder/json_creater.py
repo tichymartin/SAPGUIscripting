@@ -53,7 +53,7 @@ def create_json_for_so(materials, customer=None):
         "conditions": [
             {
                 "cond_type": "PR01",
-                "cond_value": "100",
+                "cond_value": "10000",
                 "currency": "CZK"
             }
         ]

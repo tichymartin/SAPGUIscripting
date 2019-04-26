@@ -1,8 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import system
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def get_data_for_shipment(cursor, deliveries):
@@ -101,9 +100,9 @@ def shipment_unsorted(driver, cursor, deliveries):
 
 
 if __name__ == '__main__':
-    wd = get_driver()
+    wd = get_driver("k4d")
     login(wd)
-    cursora = hana_cursor()
-    deliveris = ['2000000205', ]
+    cursora = create_hana_connection("k4d")
+    deliveris = ['2000003236', ]
     shipment_unsorted(wd, cursora, deliveris)
 

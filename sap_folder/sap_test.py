@@ -1,4 +1,4 @@
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def get_table(session):
@@ -37,7 +37,7 @@ def ywmqueue_remove_tos_from_user(session):
 
 
 def get_su_from_hana(storage_unit):
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(f"select lenum from sapecp.lein where LENUM = '{storage_unit:0>20}'")
 
     return cursor.fetchone()[0].lstrip("0")

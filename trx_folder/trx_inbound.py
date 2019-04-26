@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from other_folder.drivers import get_driver, login, hana_cursor
+from other_folder.drivers import get_driver, login, create_hana_connection
 from config import user, password
 from sap_folder.sap_getdata import get_indls_data_from_lips, get_su_from_hana
 import random
@@ -102,7 +102,7 @@ def inbound(indls):
     login(driver, user, password)
 
     navigate_in(driver, indls)
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     item_list = get_indls_data_from_lips(cursor, indls)
     pallets = []
     for item in item_list:

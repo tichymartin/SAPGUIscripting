@@ -2,6 +2,7 @@ import subprocess
 import os
 import win32com.client
 import time
+from other_folder.drivers import initialization
 
 
 def open_sap_gui():
@@ -43,9 +44,9 @@ def make_session():
 
 if __name__ == '__main__':
     # pass
-    open_sap_gui()
-    session = make_session()
-
+    # open_sap_gui()
+    # session = make_session()
+    session = initialization()
     session.StartTransaction(Transaction="YWMQUEUE")
 
     session.FindById('wnd[0]/usr/radR1').select()
@@ -53,5 +54,7 @@ if __name__ == '__main__':
     session.FindById('wnd[0]/tbar[1]/btn[8]').Press()
 
     grid_users = session.FindById("wnd[0]/usr/shell/shellcont[1]/shell/shellcont[1]/shell")
-    session.FindById("wnd[0]/usr/").verticalScrollbar.position = 100
+    ps = session.FindById("wnd[0]/usr/").verticalScrollbar.PageSize
+    print(ps)
     session.FindById("wnd[0]/usr").horizontalScrollbar.position = 100
+    session.EndTransaction()

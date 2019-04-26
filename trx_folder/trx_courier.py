@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def enter_courier(driver):
@@ -104,6 +104,6 @@ def courier_over_type(driver, deliveries_and_boxes_dict, type_courier_dict, stor
 if __name__ == '__main__':
     wd = get_driver()
     login(wd)
-    cursora = hana_cursor()
-    deliveris = ['2000000205', ]
-    print(courier(wd, cursora, deliveris))
+    cursora = create_hana_connection("k4d")
+    deliveris = ['2000003233', ]
+    courier(wd, cursora, deliveris)

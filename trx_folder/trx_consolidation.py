@@ -1,8 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import system
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def enter_consolidation(driver):
@@ -91,7 +90,7 @@ def get_data_for_consolidation(cursor, deliveries):
 
 
 def get_cons_position(type_of_cons):
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(
         f'select EXC_BARCODE from "SAPECP"."/S2IM/001_EXCPOS" where EXC_TYPE = \'1\' and EXC_LOADING_TYPE = \'{type_of_cons}\' and VBELN = \'\'')
     empty_cons_positions = [position[0] for position in cursor.fetchall() if not position[0].endswith("9999")]
@@ -108,6 +107,6 @@ def get_position_from_table(driver):
 if __name__ == '__main__':
     wd = get_driver()
     login(wd)
-    cursora = hana_cursor()
+    cursora = create_hana_connection()
     deliveris = ['2000000327', '2000000328', ]
     consolidation(wd, cursora, deliveris)

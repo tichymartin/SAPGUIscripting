@@ -1,8 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import system
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def get_data_for_control(cursor, deliveries):
@@ -161,7 +160,7 @@ def control(driver, cursor, deliveries):
 if __name__ == '__main__':
     wd = get_driver()
     login(wd)
-    cursora = hana_cursor()
-    deliveris = ['2000000327', '2000000328', ]
+    cursora = create_hana_connection()
+    deliveris = ['2000003236', ]
     control(wd, cursora, deliveris)
     # print(get_data_for_control(cursora, deliveris))

@@ -1,7 +1,7 @@
 import win32com.client
 from time import sleep
 from datetime import datetime, timedelta
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 
 
 def initialization():
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     dlv = 2000000328
     so = 5510000972
     sess = initialization()
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     # dlv = make_dlv(sess, so)
     # print(get_dlv_for_so(cursor, so))
     tos = make_transport_order_in_ylt03(sess, cursor, dlv)

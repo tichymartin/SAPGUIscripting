@@ -1,4 +1,4 @@
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 from datetime import datetime
 
 
@@ -8,7 +8,7 @@ def get_route_hana(cursor, delivery):
 
 
 def get_cart_for_shipping():
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(f"select ID from sapecp.YECH_SHIP_CART where STATUS='' and ROUTE='' and SHIPMENT_ID= '' ")
     cart_list = [cart[0] for cart in cursor.fetchall() if cart[0].startswith("M")]
     return cart_list
@@ -20,7 +20,7 @@ def get_indls_data_from_lips(cursor, indls):
 
 
 def get_cons_positions():
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(f'select * from "SAPECP"."/S2IM/001_EXCPOS"')
     return cursor.fetchone()
 
@@ -44,7 +44,7 @@ def get_items_from_hu_for_control(cursor, handling_units):
 
 
 def get_courier_positions():
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(
         f'select EXC_BARCODE from "SAPECP"."/S2IM/001_EXCPOS" where EXC_TYPE=2 and VBELN=\'\' and EXC_LOADING_TYPE=02')
     return [x[0] for x in cursor.fetchall()]
@@ -57,13 +57,13 @@ def get_courier_positions():
 
 
 def get_tst_data():
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(f'select POSNR, MATNR from SAPECP.VBAP where VBELN=5510001340 ')
     return [print(_) for _ in cursor.fetchall()]
 
 
 def get_to_from_dlv(dlv):
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     cursor.execute(f"select VBELN from SAPECP.VBFA where VBELV='{dlv}' ")
     return cursor.fetchone()[0].lstrip("0")
 
@@ -91,5 +91,5 @@ if __name__ == '__main__':
     user = "S1268"
     material = 1000398
     # print(get_tst_data())
-    cursor = hana_cursor()
+    cursor = create_hana_connection()
     print(get_dlv_for_so(cursor, so))

@@ -1,8 +1,8 @@
+import os
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import system
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 from datetime import datetime
 
 
@@ -86,10 +86,10 @@ def shipping(driver, cursor, route, user):
 
 
 if __name__ == '__main__':
-    wd = get_driver()
+    wd = get_driver("k4d")
     login(wd)
-    cursora = hana_cursor("k4t")
+    cursora = create_hana_connection("k4d")
 
-    route = "100003"
-    shipping(wd, cursora, route, user)
+    route = "100007"
+    shipping(wd, cursora, route, os.environ.get("SAP_USER"))
 

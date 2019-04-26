@@ -1,8 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from other_folder.drivers import get_driver, login
-from config import system
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import create_hana_connection
 from datetime import datetime
 
 
@@ -47,12 +46,12 @@ def get_data_for_route(cursor, route):
 
 
 def add_box_to_sorted_cart(driver, data, empty_cart):
-    source_cart_field = driver.find_element_by_id("p_field")
-    source_cart_field.send_keys(data["cart_out"])
-    source_cart_field.send_keys(Keys.RETURN)
-    source_cart_position_field = driver.find_element_by_id("p_field")
-    source_cart_position_field.send_keys(data["position"])
-    source_cart_position_field.send_keys(Keys.RETURN)
+    # source_cart_field = driver.find_element_by_id("p_field")
+    # source_cart_field.send_keys(data["cart_out"])
+    # source_cart_field.send_keys(Keys.RETURN)
+    # source_cart_position_field = driver.find_element_by_id("p_field")
+    # source_cart_position_field.send_keys(data["position"])
+    # source_cart_position_field.send_keys(Keys.RETURN)
     hu_field = driver.find_element_by_id("p_field")
     hu_field.send_keys(data["hu"])
     hu_field.send_keys(Keys.RETURN)
@@ -107,10 +106,10 @@ def shipment_sorted(driver, cursor, route):
 
 
 if __name__ == '__main__':
-    wd = get_driver("k4t")
+    wd = get_driver("k4d")
     login(wd)
-    cursora = hana_cursor("k4t")
-    route = 100003
+    cursora = create_hana_connection("k4d")
+    route = 100007
     shipment_sorted(wd, cursora, route)
     # print(get_data_for_route(cursora, route))
 

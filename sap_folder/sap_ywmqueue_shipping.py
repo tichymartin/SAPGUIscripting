@@ -48,7 +48,7 @@ def ywmqueue_shiping(session, deliveries, user):
 
 if __name__ == '__main__':
     sess = initialization()
-    deliveries = ['2000000205', ]
+    deliveries = ['2000003236', ]
     user = "S1268"
 
     ywmqueue_shiping(sess, deliveries, user)

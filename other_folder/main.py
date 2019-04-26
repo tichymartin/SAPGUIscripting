@@ -14,15 +14,28 @@ from trx_folder.trx_shipment_preparation import shipment_unsorted
 from trx_folder.trx_shipment_sorting import shipment_sorted
 from trx_folder.trx_shipping import shipping
 
-from other_folder.drivers import login, get_driver, initialization
-from other_folder.drivers import hana_cursor
+from other_folder.drivers import login, get_driver, initialization, cls_session
+from other_folder.drivers import create_hana_connection, close_hana_connection
 
+
+# def make_session(system):
+#     session = initialization()
+#     cursor = hana_cursor(system)
+#     data = {"session": session, "cursor": cursor, "user": os.environ.get("SAP_USER"), "system": system}
+#     return data
 
 def make_session(system):
-    session = initialization()
-    cursor = hana_cursor(system)
-    data = {"session": session, "cursor": cursor, "user": os.environ.get("SAP_USER"), "system": system}
+    session, connection, application, sap_gui_auto = initialization()
+    db_connection = create_hana_connection(system)
+    cursor = db_connection.cursor()
+    data = {"session": session, "connection": connection, "application": application, "sap_gui_auto": sap_gui_auto,
+            "cursor": cursor, "user": os.environ.get("SAP_USER"), "system": system, "db_connection": db_connection}
     return data
+
+
+def close_session(data):
+    cls_session(data["session"], data["connection"], data["application"], data["sap_gui_auto"])
+    close_hana_connection(data["db_connection"], data["cursor"])
 
 
 def make_so(data, data_for_sales_order, customer=None):
