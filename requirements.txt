@@ -13,7 +13,7 @@ lxml==4.2.5
 more-itertools==4.3.0
 parse==1.8.4
 pluggy==0.7.1
-py==1.6.0
+py==1.10.0
 pyee==5.0.0
 pyhdb==0.3.4
 pyppeteer==0.0.24
