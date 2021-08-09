@@ -19,7 +19,7 @@ pyhdb==0.3.4
 pyppeteer==0.0.24
 pyquery==1.4.0
 pytest==3.8.0
-pywin32==223
+pywin32==301
 requests==2.19.1
 requests-html==0.9.0
 selenium==3.14.0
